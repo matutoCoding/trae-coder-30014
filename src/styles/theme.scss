@@ -1,0 +1,39 @@
+// ============================================
+// 主题配色变量（山地茶园智慧管理）
+// ============================================
+
+// 品牌主题色：茶园绿
+$color-primary: #2E7D32;
+$color-primary-light: #66BB6A;
+$color-primary-dark: #1B5E20;
+$color-primary-gradient: linear-gradient(135deg, #2E7D32 0%, #66BB6A 100%);
+
+// 功能色
+$color-success: #4CAF50;
+$color-warning: #FF9800;
+$color-error: #F44336;
+$color-info: #2196F3;
+
+// 背景色
+$color-bg-page: #F1F8E9;
+$color-bg-card: #ffffff;
+$color-bg-hover: #E8F5E9;
+$color-bg-gradient: linear-gradient(180deg, #E8F5E9 0%, #F1F8E9 100%);
+
+// 文本色
+$color-text-primary: #1B5E20;
+$color-text-secondary: #4E5969;
+$color-text-tertiary: #86909C;
+$color-text-disabled: #C9CDD4;
+$color-text-white: #ffffff;
+
+// 边框色
+$color-border: #C8E6C9;
+$color-divider: #E8F5E9;
+
+// 业务色
+$color-tea-brown: #8D6E63;
+$color-tea-gold: #FFD700;
+$color-tea-purple: #9C27B0;
+$color-tea-early-spring: #FFD700;
+$color-tea-before-rain: #9C27B0;

@@ -1,0 +1,468 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 120rpx;
+}
+
+.tabBar {
+  display: flex;
+  background: $color-bg-card;
+  padding: $spacing-sm $spacing-lg;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  
+  .tabItem {
+    flex: 1;
+    text-align: center;
+    padding: $spacing-md 0;
+    font-size: $font-size-md;
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
+    position: relative;
+    transition: all $transition-base;
+    
+    &.active {
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 48rpx;
+        height: 6rpx;
+        background: $color-primary-gradient;
+        border-radius: 3rpx;
+      }
+    }
+  }
+}
+
+.filterBar {
+  display: flex;
+  padding: $spacing-md $spacing-lg;
+  gap: $spacing-sm;
+  overflow-x: auto;
+  
+  .filterItem {
+    @include button-reset;
+    padding: $spacing-sm $spacing-md;
+    background: $color-bg-card;
+    border-radius: $radius-button;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    white-space: nowrap;
+    border: 2rpx solid transparent;
+    transition: all $transition-base;
+    
+    &.active {
+      background: rgba(46, 125, 50, 0.1);
+      color: $color-primary;
+      border-color: $color-primary;
+    }
+    
+    &:active {
+      opacity: 0.8;
+    }
+  }
+}
+
+.content {
+  padding: $spacing-lg;
+}
+
+/* 地块卡片样式 */
+.plotCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  transition: all $transition-base;
+  
+  &:active {
+    transform: scale(0.99);
+    box-shadow: $shadow-card-hover;
+  }
+  
+  .plotHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-md;
+    
+    .plotName {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+    }
+    
+    .statusBadge {
+      padding: $spacing-xs $spacing-sm;
+      border-radius: $radius-sm;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-medium;
+      
+      &.healthy {
+        background: rgba(76, 175, 80, 0.1);
+        color: $color-success;
+      }
+      
+      &.warning {
+        background: rgba(255, 152, 0, 0.1);
+        color: $color-warning;
+      }
+      
+      &.danger {
+        background: rgba(244, 67, 54, 0.1);
+        color: $color-error;
+      }
+    }
+  }
+  
+  .plotImage {
+    width: 100%;
+    height: 240rpx;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-md;
+    overflow: hidden;
+    
+    Image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  
+  .plotInfo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-md $spacing-lg;
+    
+    .infoItem {
+      display: flex;
+      align-items: center;
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      
+      .infoLabel {
+        color: $color-text-tertiary;
+        margin-right: $spacing-xs;
+      }
+    }
+  }
+  
+  .plotFooter {
+    display: flex;
+    justify-content: space-between;
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1rpx solid $color-divider;
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+  }
+}
+
+/* 农事记录卡片样式 */
+.farmCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  
+  .farmHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-md;
+    
+    .farmType {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      
+      .typeIcon {
+        width: 64rpx;
+        height: 64rpx;
+        border-radius: $radius-md;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32rpx;
+      }
+      
+      .typeInfo {
+        .typeName {
+          font-size: $font-size-md;
+          font-weight: $font-weight-medium;
+          color: $color-text-primary;
+        }
+        
+        .plotName {
+          font-size: $font-size-xs;
+          color: $color-text-tertiary;
+        }
+      }
+    }
+    
+    .farmDate {
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+    }
+  }
+  
+  .farmDesc {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: 1.6;
+    margin-bottom: $spacing-md;
+  }
+  
+  .farmMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    
+    .metaItem {
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+    }
+  }
+}
+
+/* 采摘记录卡片样式 */
+.pickingCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  
+  .pickingHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-md;
+    
+    .batchNo {
+      font-size: $font-size-md;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+    }
+    
+    .teaType {
+      &.earlySpring {
+        background: rgba(255, 215, 0, 0.15);
+        color: #D4A017;
+      }
+      
+      &.beforeRain {
+        background: rgba(156, 39, 176, 0.1);
+        color: $color-tea-purple;
+      }
+      
+      &.afterRain {
+        background: rgba(33, 150, 243, 0.1);
+        color: $color-info;
+      }
+      
+      &.autumn {
+        background: rgba(255, 152, 0, 0.1);
+        color: $color-warning;
+      }
+    }
+  }
+  
+  .pickingInfo {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: $spacing-md;
+    
+    .infoLeft {
+      .plotName {
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+        margin-bottom: $spacing-xs;
+      }
+      
+      .pickingTime {
+        font-size: $font-size-xs;
+        color: $color-text-tertiary;
+      }
+    }
+    
+    .infoRight {
+      text-align: right;
+      
+      .weight {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-bold;
+        color: $color-primary;
+        
+        .unit {
+          font-size: $font-size-sm;
+          font-weight: $font-weight-normal;
+          margin-left: 4rpx;
+        }
+      }
+      
+      .leafGrade {
+        font-size: $font-size-xs;
+        color: $color-text-tertiary;
+        margin-top: $spacing-xs;
+      }
+    }
+  }
+  
+  .pickingFooter {
+    display: flex;
+    justify-content: space-between;
+    padding-top: $spacing-md;
+    border-top: 1rpx solid $color-divider;
+    
+    .pickers {
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+    }
+    
+    .quality {
+      font-size: $font-size-xs;
+      
+      &.excellent {
+        color: $color-success;
+      }
+      
+      &.good {
+        color: $color-info;
+      }
+      
+      &.normal {
+        color: $color-text-secondary;
+      }
+    }
+  }
+}
+
+/* 悬浮操作按钮 */
+.fabButton {
+  position: fixed;
+  right: $spacing-xl;
+  bottom: 140rpx;
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: $radius-round;
+  background: $color-primary-gradient;
+  box-shadow: 0 8rpx 24rpx rgba(46, 125, 50, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: all $transition-base;
+  
+  &:active {
+    transform: scale(0.95);
+    box-shadow: 0 4rpx 12rpx rgba(46, 125, 50, 0.3);
+  }
+  
+  .fabIcon {
+    font-size: 56rpx;
+    color: $color-text-white;
+    font-weight: $font-weight-light;
+  }
+}
+
+/* 操作菜单 */
+.actionSheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: $color-bg-card;
+  border-radius: $radius-xl $radius-xl 0 0;
+  padding: $spacing-lg;
+  z-index: 200;
+  transform: translateY(100%);
+  transition: transform $transition-base;
+  
+  &.show {
+    transform: translateY(0);
+  }
+  
+  .sheetTitle {
+    text-align: center;
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-lg;
+  }
+  
+  .sheetActions {
+    display: flex;
+    gap: $spacing-lg;
+    justify-content: center;
+    margin-bottom: $spacing-lg;
+    
+    .actionItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: $spacing-sm;
+      
+      .actionIcon {
+        width: 96rpx;
+        height: 96rpx;
+        border-radius: $radius-lg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 44rpx;
+      }
+      
+      .actionName {
+        font-size: $font-size-xs;
+        color: $color-text-secondary;
+      }
+    }
+  }
+  
+  .sheetCancel {
+    @include button-reset;
+    width: 100%;
+    height: $button-height-md;
+    background: $color-bg-hover;
+    border-radius: $radius-button;
+    font-size: $font-size-md;
+    color: $color-text-secondary;
+    
+    &:active {
+      background: $color-border;
+    }
+  }
+}
+
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 150;
+  opacity: 0;
+  visibility: hidden;
+  transition: all $transition-base;
+  
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
+}

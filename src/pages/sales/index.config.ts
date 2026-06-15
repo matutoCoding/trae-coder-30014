@@ -1,0 +1,4 @@
+export default definePageConfig({
+  navigationBarTitleText: '销售管理',
+  enablePullDownRefresh: true
+})

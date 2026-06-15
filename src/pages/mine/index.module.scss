@@ -1,0 +1,176 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+}
+
+.header {
+  background: $color-primary-gradient;
+  padding: $spacing-xxl $spacing-lg $spacing-xxl;
+  border-radius: 0 0 $radius-xl $radius-xl;
+  color: $color-text-white;
+  
+  .userInfo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+    
+    .avatar {
+      width: 140rpx;
+      height: 140rpx;
+      border-radius: $radius-round;
+      background: rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64rpx;
+      border: 4rpx solid rgba(255, 255, 255, 0.5);
+    }
+    
+    .info {
+      flex: 1;
+      
+      .name {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-semibold;
+        margin-bottom: $spacing-xs;
+      }
+      
+      .role {
+        font-size: $font-size-sm;
+        opacity: 0.9;
+        margin-bottom: $spacing-xs;
+      }
+      
+      .farm {
+        font-size: $font-size-xs;
+        opacity: 0.8;
+      }
+    }
+  }
+  
+  .statsRow {
+    display: flex;
+    justify-content: space-around;
+    margin-top: $spacing-xl;
+    
+    .statItem {
+      text-align: center;
+      
+      .value {
+        font-size: $font-size-xl;
+        font-weight: $font-weight-bold;
+        margin-bottom: $spacing-xs;
+      }
+      
+      .label {
+        font-size: $font-size-xs;
+        opacity: 0.9;
+      }
+    }
+  }
+}
+
+.content {
+  padding: $spacing-lg;
+  margin-top: -$spacing-lg;
+}
+
+/* 功能菜单组 */
+.menuGroup {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+  overflow: hidden;
+  
+  .groupTitle {
+    padding: $spacing-md $spacing-lg;
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+    background: $color-bg-page;
+  }
+  
+  .menuItem {
+    display: flex;
+    align-items: center;
+    padding: $spacing-lg;
+    border-bottom: 1rpx solid $color-divider;
+    transition: background $transition-fast;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    &:active {
+      background: $color-bg-hover;
+    }
+    
+    .menuIcon {
+      width: 72rpx;
+      height: 72rpx;
+      border-radius: $radius-md;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36rpx;
+      margin-right: $spacing-md;
+    }
+    
+    .menuContent {
+      flex: 1;
+      
+      .menuName {
+        font-size: $font-size-md;
+        color: $color-text-primary;
+      }
+      
+      .menuDesc {
+        font-size: $font-size-xs;
+        color: $color-text-tertiary;
+        margin-top: $spacing-xs;
+      }
+    }
+    
+    .menuArrow {
+      font-size: $font-size-md;
+      color: $color-text-tertiary;
+    }
+    
+    .badge {
+      background: $color-error;
+      color: $color-text-white;
+      font-size: 20rpx;
+      padding: 2rpx 12rpx;
+      border-radius: $radius-round;
+      margin-right: $spacing-sm;
+    }
+  }
+}
+
+/* 底部按钮 */
+.logoutBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-md;
+  background: $color-bg-card;
+  color: $color-error;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  margin-top: $spacing-xl;
+  border: 2rpx solid $color-error;
+  
+  &:active {
+    background: rgba(244, 67, 54, 0.05);
+  }
+}
+
+/* 版本信息 */
+.versionInfo {
+  text-align: center;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xl;
+  padding-bottom: $spacing-xl;
+}

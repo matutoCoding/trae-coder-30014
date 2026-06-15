@@ -1,0 +1,364 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+}
+
+.header {
+  background: $color-primary-gradient;
+  padding: $spacing-xl $spacing-lg $spacing-xxl;
+  border-radius: 0 0 $radius-xl $radius-xl;
+  color: $color-text-white;
+  
+  .greeting {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $spacing-xs;
+  }
+  
+  .date {
+    font-size: $font-size-sm;
+    opacity: 0.9;
+    margin-bottom: $spacing-lg;
+  }
+  
+  .weatherCard {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10rpx);
+    border-radius: $radius-lg;
+    padding: $spacing-lg;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    .weatherMain {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+      
+      .weatherIcon {
+        font-size: 72rpx;
+      }
+      
+      .weatherInfo {
+        .temp {
+          font-size: $font-size-xxl;
+          font-weight: $font-weight-bold;
+        }
+        
+        .weatherDesc {
+          font-size: $font-size-sm;
+          opacity: 0.9;
+        }
+      }
+    }
+    
+    .weatherExtra {
+      text-align: right;
+      font-size: $font-size-xs;
+      opacity: 0.9;
+      line-height: 1.8;
+    }
+  }
+}
+
+.content {
+  padding: $spacing-lg;
+  margin-top: -$spacing-xl;
+}
+
+.statsSection {
+  margin-bottom: $spacing-xl;
+  
+  .sectionTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+  }
+  
+  .statsScroll {
+    @include scroll-x-container;
+    margin: 0 -$spacing-lg;
+    padding: 0 $spacing-lg;
+  }
+  
+  .statCard {
+    @include scroll-x-item(280rpx);
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: $spacing-lg;
+    margin-right: $spacing-md;
+    box-shadow: $shadow-card;
+    
+    &:last-child {
+      margin-right: 0;
+    }
+    
+    .statHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: $spacing-md;
+      
+      .statIcon {
+        width: 72rpx;
+        height: 72rpx;
+        border-radius: $radius-md;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36rpx;
+      }
+      
+      .statTrend {
+        font-size: $font-size-xs;
+        padding: $spacing-xs $spacing-sm;
+        border-radius: $radius-sm;
+        
+        &.up {
+          background: rgba(76, 175, 80, 0.1);
+          color: $color-success;
+        }
+        
+        &.down {
+          background: rgba(244, 67, 54, 0.1);
+          color: $color-error;
+        }
+      }
+    }
+    
+    .statValue {
+      font-size: $font-size-xxl;
+      font-weight: $font-weight-bold;
+      color: $color-text-primary;
+      margin-bottom: $spacing-xs;
+    }
+    
+    .statLabel {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+    }
+  }
+}
+
+.functionSection {
+  margin-bottom: $spacing-xl;
+  
+  .sectionTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+  }
+  
+  .functionGrid {
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: $spacing-md;
+    box-shadow: $shadow-card;
+    display: flex;
+    flex-wrap: wrap;
+    
+    .functionItem {
+      width: 33.33%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: $spacing-md 0;
+      position: relative;
+      
+      .functionIcon {
+        width: 96rpx;
+        height: 96rpx;
+        border-radius: $radius-round;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 44rpx;
+        margin-bottom: $spacing-sm;
+      }
+      
+      .functionName {
+        font-size: $font-size-sm;
+        color: $color-text-primary;
+      }
+      
+      .badge {
+        position: absolute;
+        top: $spacing-sm;
+        right: $spacing-lg;
+        background: $color-error;
+        color: $color-text-white;
+        font-size: 20rpx;
+        padding: 2rpx 10rpx;
+        border-radius: $radius-round;
+        min-width: 32rpx;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.todoSection {
+  margin-bottom: $spacing-xl;
+  
+  .sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-md;
+    
+    .sectionTitle {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+    }
+    
+    .moreLink {
+      font-size: $font-size-sm;
+      color: $color-primary;
+    }
+  }
+  
+  .todoList {
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-card;
+    overflow: hidden;
+    
+    .todoItem {
+      display: flex;
+      align-items: center;
+      padding: $spacing-lg;
+      border-bottom: 1rpx solid $color-divider;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .priorityDot {
+        width: 16rpx;
+        height: 16rpx;
+        border-radius: $radius-round;
+        margin-right: $spacing-md;
+        flex-shrink: 0;
+        
+        &.high {
+          background: $color-error;
+        }
+        
+        &.medium {
+          background: $color-warning;
+        }
+        
+        &.low {
+          background: $color-text-tertiary;
+        }
+      }
+      
+      .todoContent {
+        flex: 1;
+        min-width: 0;
+        
+        .todoTitle {
+          font-size: $font-size-md;
+          color: $color-text-primary;
+          margin-bottom: $spacing-xs;
+          @include text-ellipsis;
+        }
+        
+        .todoMeta {
+          font-size: $font-size-xs;
+          color: $color-text-tertiary;
+          display: flex;
+          align-items: center;
+          gap: $spacing-md;
+        }
+      }
+      
+      .todoAction {
+        @include button-reset;
+        background: $color-primary;
+        color: $color-text-white;
+        height: 56rpx;
+        padding: 0 $spacing-md;
+        border-radius: $radius-button;
+        font-size: $font-size-xs;
+        
+        &:active {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+}
+
+.scheduleSection {
+  .sectionTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+  }
+  
+  .scheduleCard {
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: $spacing-lg;
+    box-shadow: $shadow-card;
+    margin-bottom: $spacing-md;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .scheduleHeader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: $spacing-md;
+      
+      .plotName {
+        font-size: $font-size-md;
+        font-weight: $font-weight-medium;
+        color: $color-text-primary;
+      }
+      
+      .teaType {
+        @include text-ellipsis;
+        display: inline-block;
+        
+        &.earlySpring {
+          color: #D4A017;
+          background: rgba(255, 215, 0, 0.15);
+        }
+        
+        &.beforeRain {
+          color: $color-tea-purple;
+          background: rgba(156, 39, 176, 0.1);
+        }
+        
+        &.autumn {
+          color: #FF9800;
+          background: rgba(255, 152, 0, 0.1);
+        }
+      }
+    }
+    
+    .scheduleInfo {
+      display: flex;
+      justify-content: space-between;
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      
+      .infoItem {
+        .label {
+          color: $color-text-tertiary;
+          margin-right: $spacing-xs;
+        }
+      }
+    }
+  }
+}
