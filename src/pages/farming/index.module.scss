@@ -466,3 +466,100 @@
     visibility: visible;
   }
 }
+
+.searchSection {
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-card;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background: $color-bg-page;
+  border-radius: $radius-button;
+  padding: 0 $spacing-md;
+  height: $button-height-md;
+}
+
+.searchIcon {
+  font-size: 28rpx;
+  margin-right: $spacing-sm;
+}
+
+.searchInput {
+  flex: 1;
+  font-size: $font-size-md;
+  background: transparent;
+}
+
+.statsRow {
+  display: flex;
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-card;
+}
+
+.statItem {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-sm;
+  background: rgba(46, 125, 50, 0.05);
+  border-radius: $radius-md;
+}
+
+.statValue {
+  display: block;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.listHeader {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-md;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-xxl * 2;
+}
+
+.emptyIcon {
+  font-size: 120rpx;
+  margin-bottom: $spacing-md;
+  opacity: 0.5;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.earlySpring {
+  background: rgba(255, 215, 0, 0.15);
+  color: #D4A017;
+}
+
+.beforeRain {
+  background: rgba(156, 39, 176, 0.1);
+  color: $color-tea-purple;
+}
+
+.afterRain {
+  background: rgba(33, 150, 243, 0.1);
+  color: $color-info;
+}
+
+.autumn {
+  background: rgba(255, 152, 0, 0.1);
+  color: $color-warning;
+}

@@ -17,6 +17,7 @@ const WarehousePage: React.FC = () => {
   const [showOutboundModal, setShowOutboundModal] = useState(false);
   const [inboundForm, setInboundForm] = useState({
     name: '',
+    batchNo: '',
     type: 'finished',
     typeName: '成品茶',
     grade: '一级',
@@ -113,6 +114,7 @@ const WarehousePage: React.FC = () => {
   const handleInbound = () => {
     setInboundForm({
       name: '',
+      batchNo: '',
       type: 'finished',
       typeName: '成品茶',
       grade: '一级',
@@ -166,13 +168,14 @@ const WarehousePage: React.FC = () => {
     const weight = parseFloat(inboundForm.weight);
     const quantity = parseInt(inboundForm.quantity) || 1;
     const unitPrice = parseFloat(inboundForm.unitPrice);
+    const batchNo = inboundForm.batchNo.trim() || generateBatchNo('B');
 
     let status: 'normal' | 'low-stock' | 'expiring' = 'normal';
     if (weight < 10) status = 'low-stock';
 
     const newItem: WarehouseItem = {
       id: generateId('WH'),
-      batchNo: generateBatchNo('B'),
+      batchNo: batchNo,
       name: inboundForm.name,
       type: inboundForm.type as any,
       typeName: inboundForm.typeName,
@@ -207,24 +210,36 @@ const WarehousePage: React.FC = () => {
     const outWeight = parseFloat(outboundForm.weight) || 0;
     const outQuantity = parseInt(outboundForm.quantity) || 0;
 
+    if (outWeight < 0 || outQuantity < 0) {
+      Taro.showToast({ title: '出库数量不能为负数', icon: 'none' });
+      return;
+    }
+
     if (outWeight > targetItem.weight) {
-      Taro.showToast({ title: '出库重量不能大于库存', icon: 'none' });
+      Taro.showToast({ title: `出库重量不能大于库存${targetItem.weight}${targetItem.unit}`, icon: 'none' });
+      return;
+    }
+
+    if (outQuantity > targetItem.quantity) {
+      Taro.showToast({ title: `出库件数不能大于库存${targetItem.quantity}件`, icon: 'none' });
       return;
     }
 
     const newWeight = targetItem.weight - outWeight;
     const newQuantity = targetItem.quantity - outQuantity;
 
+    if (newWeight < 0 || newQuantity < 0) {
+      Taro.showToast({ title: '库存不足，无法出库', icon: 'none' });
+      return;
+    }
+
     let newStatus: 'normal' | 'low-stock' | 'expiring' = targetItem.status;
     if (newWeight < 10) newStatus = 'low-stock';
     else if (newWeight >= 10) newStatus = 'normal';
 
-    if (newWeight <= 0) {
-      const stored = storage.getWarehouseItems();
-      const customItems = stored.filter(i => i.id !== targetItem.id);
-      const mockItems = mockWarehouseList.filter(i => i.id !== targetItem.id);
-      storage.saveWarehouseItems(customItems);
-      setItems([...mockItems, ...customItems]);
+    if (newWeight <= 0 || newQuantity <= 0) {
+      const allItems = storage.deleteWarehouseItem(targetItem.id, mockWarehouseList);
+      setItems(allItems);
     } else {
       const allItems = storage.updateWarehouseItem(
         targetItem.id,
@@ -504,6 +519,16 @@ const WarehousePage: React.FC = () => {
                 </View>
 
                 <View className={styles.formItem}>
+                  <Text className={styles.formLabel}>批次号 <Text style={{ color: '#999', fontSize: 24 }}>(不输则自动生成)</Text></Text>
+                  <Input
+                    className={styles.formInput}
+                    placeholder="手动输入批次号，如B20260616001"
+                    value={inboundForm.batchNo}
+                    onInput={(e) => setInboundForm({ ...inboundForm, batchNo: e.detail.value })}
+                  />
+                </View>
+
+                <View className={styles.formItem}>
                   <Text className={styles.formLabel}>商品类型</Text>
                   <Picker
                     mode="selector"
@@ -627,7 +652,7 @@ const WarehousePage: React.FC = () => {
                 <View className={styles.selectedItemInfo}>
                   <Text className={styles.selectedItemName}>{selectedItem.name}</Text>
                   <Text className={styles.selectedItemBatch}>批次：{selectedItem.batchNo}</Text>
-                  <Text className={styles.selectedItemStock}>当前库存：{selectedItem.weight}{selectedItem.unit}</Text>
+                  <Text className={styles.selectedItemStock}>当前库存：{selectedItem.weight}{selectedItem.unit} / {selectedItem.quantity}件</Text>
                 </View>
               ) : (
                 <View className={styles.formItem}>

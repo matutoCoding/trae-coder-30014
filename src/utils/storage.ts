@@ -4,155 +4,189 @@ const STORAGE_KEYS = {
   FARM_RECORDS: 'tea_farm_records',
   PICKING_RECORDS: 'tea_picking_records',
   WAREHOUSE_ITEMS: 'tea_warehouse_items',
+  WAREHOUSE_MODIFIED: 'tea_warehouse_modified',
+  WAREHOUSE_DELETED: 'tea_warehouse_deleted',
+  FARM_MODIFIED: 'tea_farm_modified',
+  FARM_DELETED: 'tea_farm_deleted',
+  PICKING_MODIFIED: 'tea_picking_modified',
+  PICKING_DELETED: 'tea_picking_deleted',
   LEDGER_RECORDS: 'tea_ledger_records',
   TRACE_INFO: 'tea_trace_info'
 };
 
-const mergeWithMock = <T>(mockData: T[], storedData: T[], idKey: string = 'id'): T[] => {
-  if (!storedData || storedData.length === 0) return mockData;
-  const mockIds = new Set(mockData.map(item => item[idKey as keyof T]));
-  const newItems = storedData.filter(item => !mockIds.has(item[idKey as keyof T]));
-  return [...mockData, ...newItems];
+const getStorage = <T>(key: string, defaultValue: T): T => {
+  try {
+    const data = Taro.getStorageSync(key);
+    return data !== '' && data !== undefined && data !== null ? data : defaultValue;
+  } catch {
+    return defaultValue;
+  }
+};
+
+const setStorage = <T>(key: string, data: T): void => {
+  try {
+    Taro.setStorageSync(key, data);
+  } catch (e) {
+    console.error(`保存${key}失败:`, e);
+  }
+};
+
+const mergeDataWithMock = <T extends { id: string }>(
+  mockData: T[],
+  newItemsKey: string,
+  modifiedKey: string,
+  deletedKey: string
+): T[] => {
+  const newItems: T[] = getStorage(newItemsKey, []);
+  const modified: Record<string, T> = getStorage(modifiedKey, {});
+  const deleted: string[] = getStorage(deletedKey, []);
+  const deletedSet = new Set(deleted);
+
+  const merged: T[] = [];
+  
+  for (const item of mockData) {
+    if (deletedSet.has(item.id)) continue;
+    if (modified[item.id]) {
+      merged.push({ ...item, ...modified[item.id] });
+    } else {
+      merged.push(item);
+    }
+  }
+
+  for (const item of newItems) {
+    if (!deletedSet.has(item.id)) {
+      if (modified[item.id]) {
+        merged.push({ ...item, ...modified[item.id] });
+      } else {
+        merged.push(item);
+      }
+    }
+  }
+
+  return merged;
+};
+
+const addItem = <T extends { id: string }>(
+  item: T,
+  mockData: T[],
+  newItemsKey: string,
+  modifiedKey: string,
+  deletedKey: string
+): T[] => {
+  const newItems: T[] = getStorage(newItemsKey, []);
+  newItems.unshift(item);
+  setStorage(newItemsKey, newItems);
+  return mergeDataWithMock(mockData, newItemsKey, modifiedKey, deletedKey);
+};
+
+const updateItem = <T extends { id: string }>(
+  itemId: string,
+  updates: Partial<T>,
+  mockData: T[],
+  newItemsKey: string,
+  modifiedKey: string,
+  deletedKey: string
+): T[] => {
+  const modified: Record<string, T> = getStorage(modifiedKey, {});
+  const existing = modified[itemId] || {} as T;
+  modified[itemId] = { ...existing, ...updates, id: itemId } as T;
+  setStorage(modifiedKey, modified);
+  return mergeDataWithMock(mockData, newItemsKey, modifiedKey, deletedKey);
+};
+
+const deleteItem = <T extends { id: string }>(
+  itemId: string,
+  mockData: T[],
+  newItemsKey: string,
+  modifiedKey: string,
+  deletedKey: string
+): T[] => {
+  const deleted: string[] = getStorage(deletedKey, []);
+  if (!deleted.includes(itemId)) {
+    deleted.push(itemId);
+    setStorage(deletedKey, deleted);
+  }
+  return mergeDataWithMock(mockData, newItemsKey, modifiedKey, deletedKey);
 };
 
 export const storage = {
-  getFarmRecords: () => {
-    try {
-      return Taro.getStorageSync(STORAGE_KEYS.FARM_RECORDS) || [];
-    } catch {
-      return [];
-    }
-  },
-
-  saveFarmRecords: (records: any[]) => {
-    try {
-      Taro.setStorageSync(STORAGE_KEYS.FARM_RECORDS, records);
-    } catch (e) {
-      console.error('保存农事记录失败:', e);
-    }
-  },
-
+  getFarmRecords: (): any[] => getStorage(STORAGE_KEYS.FARM_RECORDS, []),
+  saveFarmRecords: (records: any[]) => setStorage(STORAGE_KEYS.FARM_RECORDS, records),
+  
   addFarmRecord: (record: any, mockRecords: any[]) => {
-    const stored = storage.getFarmRecords();
-    const allRecords = mergeWithMock(mockRecords, stored);
-    allRecords.unshift(record);
-    const customRecords = allRecords.filter(r => !mockRecords.find(m => m.id === r.id));
-    storage.saveFarmRecords(customRecords);
-    return allRecords;
+    return addItem(record, mockRecords, STORAGE_KEYS.FARM_RECORDS, STORAGE_KEYS.FARM_MODIFIED, STORAGE_KEYS.FARM_DELETED);
   },
 
-  getPickingRecords: () => {
-    try {
-      return Taro.getStorageSync(STORAGE_KEYS.PICKING_RECORDS) || [];
-    } catch {
-      return [];
-    }
+  updateFarmRecord: (recordId: string, updates: any, mockRecords: any[]) => {
+    return updateItem(recordId, updates, mockRecords, STORAGE_KEYS.FARM_RECORDS, STORAGE_KEYS.FARM_MODIFIED, STORAGE_KEYS.FARM_DELETED);
   },
 
-  savePickingRecords: (records: any[]) => {
-    try {
-      Taro.setStorageSync(STORAGE_KEYS.PICKING_RECORDS, records);
-    } catch (e) {
-      console.error('保存采摘记录失败:', e);
-    }
-  },
-
-  addPickingRecord: (record: any, mockRecords: any[]) => {
-    const stored = storage.getPickingRecords();
-    const allRecords = mergeWithMock(mockRecords, stored);
-    allRecords.unshift(record);
-    const customRecords = allRecords.filter(r => !mockRecords.find(m => m.id === r.id));
-    storage.savePickingRecords(customRecords);
-    return allRecords;
-  },
-
-  getWarehouseItems: () => {
-    try {
-      return Taro.getStorageSync(STORAGE_KEYS.WAREHOUSE_ITEMS) || [];
-    } catch {
-      return [];
-    }
-  },
-
-  saveWarehouseItems: (items: any[]) => {
-    try {
-      Taro.setStorageSync(STORAGE_KEYS.WAREHOUSE_ITEMS, items);
-    } catch (e) {
-      console.error('保存库存数据失败:', e);
-    }
-  },
-
-  addWarehouseItem: (item: any, mockItems: any[]) => {
-    const stored = storage.getWarehouseItems();
-    const allItems = mergeWithMock(mockItems, stored);
-    allItems.unshift(item);
-    const customItems = allItems.filter(i => !mockItems.find(m => m.id === i.id));
-    storage.saveWarehouseItems(customItems);
-    return allItems;
-  },
-
-  updateWarehouseItem: (itemId: string, updates: any, mockItems: any[]) => {
-    const stored = storage.getWarehouseItems();
-    const allItems = mergeWithMock(mockItems, stored);
-    const index = allItems.findIndex(i => i.id === itemId);
-    if (index !== -1) {
-      allItems[index] = { ...allItems[index], ...updates };
-      const customItems = allItems.filter(i => !mockItems.find(m => m.id === i.id));
-      storage.saveWarehouseItems(customItems);
-    }
-    return allItems;
-  },
-
-  getLedgerRecords: () => {
-    try {
-      return Taro.getStorageSync(STORAGE_KEYS.LEDGER_RECORDS) || [];
-    } catch {
-      return [];
-    }
-  },
-
-  saveLedgerRecords: (records: any[]) => {
-    try {
-      Taro.setStorageSync(STORAGE_KEYS.LEDGER_RECORDS, records);
-    } catch (e) {
-      console.error('保存台账记录失败:', e);
-    }
-  },
-
-  addLedgerRecord: (record: any, mockRecords: any[]) => {
-    const stored = storage.getLedgerRecords();
-    const allRecords = mergeWithMock(mockRecords, stored);
-    allRecords.unshift(record);
-    const customRecords = allRecords.filter(r => !mockRecords.find(m => m.id === r.id));
-    storage.saveLedgerRecords(customRecords);
-    return allRecords;
+  deleteFarmRecord: (recordId: string, mockRecords: any[]) => {
+    return deleteItem(recordId, mockRecords, STORAGE_KEYS.FARM_RECORDS, STORAGE_KEYS.FARM_MODIFIED, STORAGE_KEYS.FARM_DELETED);
   },
 
   getAllFarmRecords: (mockRecords: any[]) => {
-    const stored = storage.getFarmRecords();
-    return mergeWithMock(mockRecords, stored);
+    return mergeDataWithMock(mockRecords, STORAGE_KEYS.FARM_RECORDS, STORAGE_KEYS.FARM_MODIFIED, STORAGE_KEYS.FARM_DELETED);
+  },
+
+  getPickingRecords: (): any[] => getStorage(STORAGE_KEYS.PICKING_RECORDS, []),
+  savePickingRecords: (records: any[]) => setStorage(STORAGE_KEYS.PICKING_RECORDS, records),
+
+  addPickingRecord: (record: any, mockRecords: any[]) => {
+    return addItem(record, mockRecords, STORAGE_KEYS.PICKING_RECORDS, STORAGE_KEYS.PICKING_MODIFIED, STORAGE_KEYS.PICKING_DELETED);
+  },
+
+  updatePickingRecord: (recordId: string, updates: any, mockRecords: any[]) => {
+    return updateItem(recordId, updates, mockRecords, STORAGE_KEYS.PICKING_RECORDS, STORAGE_KEYS.PICKING_MODIFIED, STORAGE_KEYS.PICKING_DELETED);
+  },
+
+  deletePickingRecord: (recordId: string, mockRecords: any[]) => {
+    return deleteItem(recordId, mockRecords, STORAGE_KEYS.PICKING_RECORDS, STORAGE_KEYS.PICKING_MODIFIED, STORAGE_KEYS.PICKING_DELETED);
   },
 
   getAllPickingRecords: (mockRecords: any[]) => {
-    const stored = storage.getPickingRecords();
-    return mergeWithMock(mockRecords, stored);
+    return mergeDataWithMock(mockRecords, STORAGE_KEYS.PICKING_RECORDS, STORAGE_KEYS.PICKING_MODIFIED, STORAGE_KEYS.PICKING_DELETED);
+  },
+
+  getWarehouseItems: (): any[] => getStorage(STORAGE_KEYS.WAREHOUSE_ITEMS, []),
+  saveWarehouseItems: (items: any[]) => setStorage(STORAGE_KEYS.WAREHOUSE_ITEMS, items),
+
+  addWarehouseItem: (item: any, mockItems: any[]) => {
+    return addItem(item, mockItems, STORAGE_KEYS.WAREHOUSE_ITEMS, STORAGE_KEYS.WAREHOUSE_MODIFIED, STORAGE_KEYS.WAREHOUSE_DELETED);
+  },
+
+  updateWarehouseItem: (itemId: string, updates: any, mockItems: any[]) => {
+    return updateItem(itemId, updates, mockItems, STORAGE_KEYS.WAREHOUSE_ITEMS, STORAGE_KEYS.WAREHOUSE_MODIFIED, STORAGE_KEYS.WAREHOUSE_DELETED);
+  },
+
+  deleteWarehouseItem: (itemId: string, mockItems: any[]) => {
+    return deleteItem(itemId, mockItems, STORAGE_KEYS.WAREHOUSE_ITEMS, STORAGE_KEYS.WAREHOUSE_MODIFIED, STORAGE_KEYS.WAREHOUSE_DELETED);
   },
 
   getAllWarehouseItems: (mockItems: any[]) => {
-    const stored = storage.getWarehouseItems();
-    return mergeWithMock(mockItems, stored);
+    return mergeDataWithMock(mockItems, STORAGE_KEYS.WAREHOUSE_ITEMS, STORAGE_KEYS.WAREHOUSE_MODIFIED, STORAGE_KEYS.WAREHOUSE_DELETED);
+  },
+
+  getLedgerRecords: (): any[] => getStorage(STORAGE_KEYS.LEDGER_RECORDS, []),
+  saveLedgerRecords: (records: any[]) => setStorage(STORAGE_KEYS.LEDGER_RECORDS, records),
+
+  addLedgerRecord: (record: any, mockRecords: any[]) => {
+    const stored = storage.getLedgerRecords();
+    stored.unshift(record);
+    storage.saveLedgerRecords(stored);
+    return [...mockRecords, ...stored];
   },
 
   getAllLedgerRecords: (mockRecords: any[]) => {
     const stored = storage.getLedgerRecords();
-    return mergeWithMock(mockRecords, stored);
+    return [...mockRecords, ...stored];
   },
 
   saveTraceInfo: (traceCode: string, info: any) => {
     try {
-      const all = Taro.getStorageSync(STORAGE_KEYS.TRACE_INFO) || {};
+      const all = getStorage<Record<string, any>>(STORAGE_KEYS.TRACE_INFO, {});
       all[traceCode] = info;
-      Taro.setStorageSync(STORAGE_KEYS.TRACE_INFO, all);
+      setStorage(STORAGE_KEYS.TRACE_INFO, all);
     } catch (e) {
       console.error('保存溯源信息失败:', e);
     }
@@ -160,11 +194,17 @@ export const storage = {
 
   getTraceInfo: (traceCode: string) => {
     try {
-      const all = Taro.getStorageSync(STORAGE_KEYS.TRACE_INFO) || {};
+      const all = getStorage<Record<string, any>>(STORAGE_KEYS.TRACE_INFO, {});
       return all[traceCode] || null;
     } catch {
       return null;
     }
+  },
+
+  clearAll: () => {
+    Object.values(STORAGE_KEYS).forEach(key => {
+      try { Taro.removeStorageSync(key); } catch {}
+    });
   }
 };
 

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, Image, Button, ScrollView } from '@tarojs/components';
-import Taro, { useRouter } from '@tarojs/taro';
+import React, { useState, useMemo } from 'react';
+import { View, Text, Image, Button, ScrollView, Input } from '@tarojs/components';
+import Taro, { useRouter, useDidShow } from '@tarojs/taro';
 import styles from './index.module.scss';
 import classnames from 'classnames';
 import { mockTeaPlots, mockFarmRecords, mockPickingRecords } from '@/data/mockFarming';
 import { TeaPlot, FarmRecord, PickingRecord } from '@/types';
+import { storage } from '@/utils/storage';
 
 const FarmingPage: React.FC = () => {
   const router = useRouter();
@@ -13,6 +14,9 @@ const FarmingPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>(initialTab);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [showActionSheet, setShowActionSheet] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [records, setRecords] = useState<FarmRecord[]>([]);
+  const [pickings, setPickings] = useState<PickingRecord[]>([]);
 
   const tabs = [
     { key: 'plots', label: '茶园地块' },
@@ -28,12 +32,41 @@ const FarmingPage: React.FC = () => {
   ];
 
   const [plots] = useState<TeaPlot[]>(mockTeaPlots);
-  const [records] = useState<FarmRecord[]>(mockFarmRecords);
-  const [pickings] = useState<PickingRecord[]>(mockPickingRecords);
 
-  const filteredPlots = statusFilter === 'all' 
-    ? plots 
-    : plots.filter(p => p.status === statusFilter);
+  useDidShow(() => {
+    loadData();
+  });
+
+  const loadData = () => {
+    const allRecords = storage.getAllFarmRecords(mockFarmRecords);
+    const allPickings = storage.getAllPickingRecords(mockPickingRecords);
+    setRecords(allRecords);
+    setPickings(allPickings);
+  };
+
+  const filteredPlots = useMemo(() => {
+    return statusFilter === 'all' 
+      ? plots 
+      : plots.filter(p => p.status === statusFilter);
+  }, [plots, statusFilter]);
+
+  const filteredRecords = useMemo(() => {
+    return records.filter(record => {
+      if (searchText && !record.description.includes(searchText) && !record.plotName.includes(searchText) && !record.typeName.includes(searchText)) {
+        return false;
+      }
+      return true;
+    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }, [records, searchText]);
+
+  const filteredPickings = useMemo(() => {
+    return pickings.filter(picking => {
+      if (searchText && !picking.batchNo.includes(searchText) && !picking.plotName.includes(searchText)) {
+        return false;
+      }
+      return true;
+    }).sort((a, b) => new Date(b.date + ' ' + b.time).getTime() - new Date(a.date + ' ' + a.time).getTime());
+  }, [pickings, searchText]);
 
   const getStatusText = (status: string) => {
     if (status === 'healthy') return '正常';
@@ -67,6 +100,13 @@ const FarmingPage: React.FC = () => {
     if (quality === 'excellent') return '优质';
     if (quality === 'good') return '良好';
     return '一般';
+  };
+
+  const getTeaTypeClass = (type: string) => {
+    if (type === 'early-spring') return styles.earlySpring;
+    if (type === 'before-rain') return styles.beforeRain;
+    if (type === 'autumn') return styles.autumn;
+    return '';
   };
 
   const handlePlotClick = (plot: TeaPlot) => {
@@ -114,7 +154,6 @@ const FarmingPage: React.FC = () => {
 
   return (
     <View className={styles.page}>
-      {/* Tab切换 */}
       <View className={styles.tabBar}>
         {tabs.map((tab) => (
           <View
@@ -127,7 +166,20 @@ const FarmingPage: React.FC = () => {
         ))}
       </View>
 
-      {/* 筛选栏 - 仅地块页显示 */}
+      {activeTab !== 'plots' && (
+        <View className={styles.searchSection}>
+          <View className={styles.searchBar}>
+            <Text className={styles.searchIcon}>🔍</Text>
+            <Input
+              className={styles.searchInput}
+              placeholder={activeTab === 'records' ? '搜索农事记录' : '搜索采摘批次'}
+              value={searchText}
+              onInput={(e) => setSearchText(e.detail.value)}
+            />
+          </View>
+        </View>
+      )}
+
       {activeTab === 'plots' && (
         <ScrollView className={styles.filterBar} scrollX enableFlex>
           {statusFilters.map((filter) => (
@@ -142,9 +194,49 @@ const FarmingPage: React.FC = () => {
         </ScrollView>
       )}
 
-      {/* 内容区域 */}
-      <View className={styles.content}>
-        {/* 地块列表 */}
+      {activeTab === 'records' && (
+        <View className={styles.statsRow}>
+          <View className={styles.statItem}>
+            <Text className={styles.statValue}>{filteredRecords.length}</Text>
+            <Text className={styles.statLabel}>农事记录</Text>
+          </View>
+          <View className={styles.statItem}>
+            <Text className={styles.statValue}>{filteredRecords.filter(r => r.type === 'fertilize').length}</Text>
+            <Text className={styles.statLabel}>施肥</Text>
+          </View>
+          <View className={styles.statItem}>
+            <Text className={styles.statValue}>{filteredRecords.filter(r => r.type === 'pest').length}</Text>
+            <Text className={styles.statLabel}>防虫</Text>
+          </View>
+          <View className={styles.statItem}>
+            <Text className={styles.statValue}>{filteredRecords.filter(r => r.type === 'irrigate').length}</Text>
+            <Text className={styles.statLabel}>灌溉</Text>
+          </View>
+        </View>
+      )}
+
+      {activeTab === 'picking' && (
+        <View className={styles.statsRow}>
+          <View className={styles.statItem}>
+            <Text className={styles.statValue}>{filteredPickings.length}</Text>
+            <Text className={styles.statLabel}>采摘批次</Text>
+          </View>
+          <View className={styles.statItem}>
+            <Text className={styles.statValue}>{filteredPickings.reduce((sum, p) => sum + p.weight, 0).toFixed(1)}kg</Text>
+            <Text className={styles.statLabel}>总重量</Text>
+          </View>
+          <View className={styles.statItem}>
+            <Text className={styles.statValue}>{filteredPickings.filter(p => p.quality === 'excellent').length}</Text>
+            <Text className={styles.statLabel}>特级</Text>
+          </View>
+          <View className={styles.statItem}>
+            <Text className={styles.statValue}>{filteredPickings.filter(p => p.quality === 'good').length}</Text>
+            <Text className={styles.statLabel}>优良</Text>
+          </View>
+        </View>
+      )}
+
+      <ScrollView className={styles.content} scrollY>
         {activeTab === 'plots' && (
           <View>
             {filteredPlots.map((plot) => (
@@ -189,10 +281,12 @@ const FarmingPage: React.FC = () => {
           </View>
         )}
 
-        {/* 农事记录列表 */}
         {activeTab === 'records' && (
           <View>
-            {records.map((record) => (
+            <View className={styles.listHeader}>
+              <Text>共 {filteredRecords.length} 条记录</Text>
+            </View>
+            {filteredRecords.map((record) => (
               <View
                 key={record.id}
                 className={styles.farmCard}
@@ -232,13 +326,21 @@ const FarmingPage: React.FC = () => {
                 </View>
               </View>
             ))}
+            {filteredRecords.length === 0 && (
+              <View className={styles.empty}>
+                <Text className={styles.emptyIcon}>📝</Text>
+                <Text className={styles.emptyText}>暂无农事记录</Text>
+              </View>
+            )}
           </View>
         )}
 
-        {/* 采摘记录列表 */}
         {activeTab === 'picking' && (
           <View>
-            {pickings.map((picking) => (
+            <View className={styles.listHeader}>
+              <Text>共 {filteredPickings.length} 条采摘记录</Text>
+            </View>
+            {filteredPickings.map((picking) => (
               <View
                 key={picking.id}
                 className={styles.pickingCard}
@@ -246,7 +348,7 @@ const FarmingPage: React.FC = () => {
               >
                 <View className={styles.pickingHeader}>
                   <Text className={styles.batchNo}>{picking.batchNo}</Text>
-                  <View className={classnames('tag', styles[picking.type])}>
+                  <View className={classnames('tag', getTeaTypeClass(picking.type))}>
                     {picking.typeName}
                   </View>
                 </View>
@@ -273,22 +375,27 @@ const FarmingPage: React.FC = () => {
                 </View>
               </View>
             ))}
+            {filteredPickings.length === 0 && (
+              <View className={styles.empty}>
+                <Text className={styles.emptyIcon}>🍃</Text>
+                <Text className={styles.emptyText}>暂无采摘记录</Text>
+              </View>
+            )}
           </View>
         )}
-      </View>
 
-      {/* 悬浮操作按钮 */}
+        <View style={{ height: 120 }} />
+      </ScrollView>
+
       <View className={styles.fabButton} onClick={() => setShowActionSheet(true)}>
         <Text className={styles.fabIcon}>+</Text>
       </View>
 
-      {/* 遮罩层 */}
       <View
         className={classnames(styles.mask, showActionSheet && styles.show)}
         onClick={() => setShowActionSheet(false)}
       />
 
-      {/* 操作菜单 */}
       <View className={classnames(styles.actionSheet, showActionSheet && styles.show)}>
         <Text className={styles.sheetTitle}>选择操作</Text>
         <View className={styles.sheetActions}>
