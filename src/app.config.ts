@@ -13,7 +13,12 @@ export default defineAppConfig({
     'pages/order-detail/index',
     'pages/trace/index',
     'pages/ledger/index',
-    'pages/tea-tour/index'
+    'pages/tea-tour/index',
+    'pages/e-commerce/index',
+    'pages/staff/index',
+    'pages/settings/index',
+    'pages/help/index',
+    'pages/profile/index'
   ],
   window: {
     backgroundTextStyle: 'light',

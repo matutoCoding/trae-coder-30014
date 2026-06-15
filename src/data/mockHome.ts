@@ -73,7 +73,7 @@ export const mockWeather: WeatherInfo = {
 
 export const mockHomeFunctions: FunctionItem[] = [
   { id: '1', name: '茶园地块', icon: '🌿', color: '#2E7D32', page: '/pages/farming/index' },
-  { id: '2', name: '农事管理', icon: '👨‍🌾', color: '#8D6E63', page: '/pages/farming/index?tab=records' },
+  { id: '2', name: '农事管理', icon: '👨‍🌾', color: '#8D6E63', page: '/pages/farm-record/index' },
   { id: '3', name: '采摘记录', icon: '🍃', color: '#66BB6A', page: '/pages/picking/index' },
   { id: '4', name: '制茶工序', icon: '🍵', color: '#795548', page: '/pages/processing/index' },
   { id: '5', name: '仓储管理', icon: '📦', color: '#5D4037', page: '/pages/warehouse/index' },

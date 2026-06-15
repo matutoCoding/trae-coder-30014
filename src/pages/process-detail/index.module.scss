@@ -5,41 +5,356 @@
   background: $color-bg-page;
   display: flex;
   flex-direction: column;
+}
+
+.header {
+  background: $color-primary-gradient;
+  padding: $spacing-lg;
+  padding-top: $spacing-xl;
+  color: white;
+}
+
+.backBtn {
+  width: 64rpx;
+  height: 64rpx;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: $spacing-xl;
+  color: white;
+  margin-bottom: $spacing-md;
   
-  .icon {
-    font-size: 160rpx;
-    margin-bottom: $spacing-xl;
+  &:active {
+    opacity: 0.8;
   }
+}
+
+.headerContent {
+  margin-bottom: $spacing-lg;
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xs;
+}
+
+.batchNo {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+}
+
+.statusTag {
+  padding: 4rpx 16rpx;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+}
+
+.operator {
+  font-size: $font-size-sm;
+  opacity: 0.9;
+}
+
+.metricsRow {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: $radius-card;
+  padding: $spacing-md;
+}
+
+.metricItem {
+  flex: 1;
+  text-align: center;
+}
+
+.metricValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.metricLabel {
+  font-size: $font-size-xs;
+  opacity: 0.9;
+}
+
+.metricDivider {
+  width: 1rpx;
+  height: 60rpx;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.completed {
+  background: rgba(76, 175, 80, 0.9);
+  color: white;
   
-  .title {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-semibold;
-    color: $color-text-primary;
-    margin-bottom: $spacing-md;
+  &.statusTag {
+    background: rgba(76, 175, 80, 0.9);
   }
+}
+
+.processing {
+  background: rgba(255, 152, 0, 0.9);
+  color: white;
   
-  .desc {
-    font-size: $font-size-md;
-    color: $color-text-tertiary;
-    text-align: center;
-    line-height: 1.6;
-    margin-bottom: $spacing-xl;
+  &.statusTag {
+    background: rgba(255, 152, 0, 0.9);
   }
+}
+
+.pending {
+  background: rgba(158, 158, 158, 0.9);
+  color: white;
   
-  .backBtn {
-    @include button-reset;
-    height: $button-height-md;
-    padding: 0 $spacing-xl;
-    background: $color-primary-gradient;
-    color: $color-text-white;
-    border-radius: $radius-button;
-    font-size: $font-size-md;
-    
-    &:active {
-      opacity: 0.9;
-    }
+  &.statusTag {
+    background: rgba(158, 158, 158, 0.9);
   }
+}
+
+.content {
+  flex: 1;
+  padding: $spacing-md;
+}
+
+.timeCard {
+  display: flex;
+  background: white;
+  border-radius: $radius-card;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-sm;
+}
+
+.timeItem {
+  flex: 1;
+  text-align: center;
+}
+
+.timeLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.timeValue {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.section {
+  background: white;
+  border-radius: $radius-card;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-sm;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+}
+
+.timeline {
+  position: relative;
+}
+
+.stepItem {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.stepLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60rpx;
+}
+
+.stepNode {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.stepCheck {
+  font-size: 24rpx;
+  color: white;
+  font-weight: bold;
+}
+
+.stepNumber {
+  font-size: $font-size-sm;
+  color: white;
+  font-weight: $font-weight-medium;
+}
+
+.stepLine {
+  flex: 1;
+  width: 4rpx;
+  background: $color-border-light;
+  margin: $spacing-xs 0;
+}
+
+.lineCompleted {
+  background: $color-primary;
+}
+
+.stepContent {
+  flex: 1;
+  padding-bottom: $spacing-lg;
+  min-width: 0;
+}
+
+.stepHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-sm 0;
+}
+
+.stepInfo {
+  flex: 1;
+}
+
+.stepName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.stepStatus {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.stepArrow {
+  font-size: 48rpx;
+  color: $color-text-tertiary;
+  transition: transform 0.2s;
+}
+
+.arrowUp {
+  transform: rotate(90deg);
+}
+
+.stepDetail {
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  margin-top: $spacing-sm;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.detailLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.detailValue {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.paramsSection {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1rpx solid $color-border-light;
+}
+
+.paramsTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.paramsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-sm;
+}
+
+.paramItem {
+  background: white;
+  border-radius: $radius-sm;
+  padding: $spacing-sm;
+  text-align: center;
+}
+
+.paramValue {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.paramLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.actionBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-md;
+  background: $color-primary-gradient;
+  color: white;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  margin-top: $spacing-md;
+  
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.infoCard {
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-border-light;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.infoLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.infoValue {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
 }

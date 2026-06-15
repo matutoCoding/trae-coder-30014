@@ -72,11 +72,26 @@ const HomePage: React.FC = () => {
     return styles.autumn;
   };
 
+  const tabBarPages = [
+    '/pages/home/index',
+    '/pages/farming/index',
+    '/pages/processing/index',
+    '/pages/sales/index',
+    '/pages/mine/index'
+  ];
+
   const handleFunctionClick = (func: FunctionItem) => {
     console.log('[HomePage] 点击功能:', func.name, '页面:', func.page);
-    Taro.navigateTo({ url: func.page }).catch((err) => {
-      console.error('[HomePage] 跳转失败:', err);
-    });
+    const basePath = func.page.split('?')[0];
+    if (tabBarPages.includes(basePath)) {
+      Taro.switchTab({ url: basePath }).catch((err) => {
+        console.error('[HomePage] switchTab跳转失败:', err);
+      });
+    } else {
+      Taro.navigateTo({ url: func.page }).catch((err) => {
+        console.error('[HomePage] navigateTo跳转失败:', err);
+      });
+    }
   };
 
   const handleTodoClick = (todo: TodoItem) => {

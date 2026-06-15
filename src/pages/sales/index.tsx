@@ -65,7 +65,7 @@ const SalesPage: React.FC = () => {
     { name: '仓储管理', icon: '📦', color: 'rgba(93, 64, 55, 0.1)', page: '/pages/warehouse/index' },
     { name: '收支台账', icon: '💰', color: 'rgba(76, 175, 80, 0.1)', page: '/pages/ledger/index' },
     { name: '茶旅体验', icon: '🏞️', color: 'rgba(156, 39, 176, 0.1)', page: '/pages/tea-tour/index' },
-    { name: '电商商品', icon: '🛍️', color: 'rgba(255, 152, 0, 0.1)', page: '/pages/sales/index' }
+    { name: '电商商品', icon: '🛍️', color: 'rgba(255, 152, 0, 0.1)', page: '/pages/e-commerce/index' }
   ];
 
   return (

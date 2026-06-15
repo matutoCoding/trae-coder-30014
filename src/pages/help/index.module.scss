@@ -1,0 +1,328 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabHeader {
+  display: flex;
+  background: $color-bg-card;
+  padding: 0 $spacing-lg;
+  border-bottom: 1rpx solid $color-divider;
+
+  .tabItem {
+    flex: 1;
+    text-align: center;
+    padding: $spacing-md 0;
+    font-size: $font-size-md;
+    color: $color-text-secondary;
+    position: relative;
+
+    &.active {
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60rpx;
+        height: 6rpx;
+        background: $color-primary;
+        border-radius: 3rpx;
+      }
+    }
+  }
+}
+
+.faqSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryScroll {
+  white-space: nowrap;
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-card;
+  border-bottom: 1rpx solid $color-divider;
+
+  .categoryItem {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-sm $spacing-md;
+    margin-right: $spacing-md;
+    background: $color-bg-page;
+    border-radius: $radius-lg;
+    min-width: 120rpx;
+
+    &.active {
+      background: rgba(46, 125, 50, 0.1);
+
+      .categoryLabel {
+        color: $color-primary;
+      }
+    }
+
+    .categoryIcon {
+      font-size: 40rpx;
+    }
+
+    .categoryLabel {
+      font-size: $font-size-xs;
+      color: $color-text-secondary;
+    }
+  }
+}
+
+.faqList {
+  flex: 1;
+  height: 0;
+  padding: $spacing-md $spacing-lg;
+}
+
+.faqItem {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-sm;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+
+  .faqQuestion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-md;
+
+    .questionInfo {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      flex: 1;
+
+      .questionIcon {
+        font-size: 32rpx;
+        flex-shrink: 0;
+      }
+
+      .questionText {
+        font-size: $font-size-sm;
+        color: $color-text-primary;
+        font-weight: $font-weight-medium;
+      }
+    }
+
+    .expandIcon {
+      font-size: 20rpx;
+      color: $color-text-tertiary;
+      transition: transform 0.3s;
+      flex-shrink: 0;
+
+      &.expanded {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .faqAnswer {
+    padding: 0 $spacing-md $spacing-md;
+    border-top: 1rpx solid $color-divider;
+
+    .answerText {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      line-height: 1.8;
+      padding: $spacing-sm 0;
+    }
+
+    .answerTag {
+      display: inline-block;
+      padding: 4rpx $spacing-sm;
+      background: rgba(46, 125, 50, 0.1);
+      color: $color-primary;
+      border-radius: $radius-sm;
+      font-size: $font-size-xs;
+    }
+  }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+
+  .emptyIcon {
+    font-size: 120rpx;
+    margin-bottom: $spacing-md;
+  }
+
+  .emptyText {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+  }
+}
+
+.contactSection {
+  padding: $spacing-lg;
+  background: $color-bg-card;
+  margin: $spacing-md $spacing-lg;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-card;
+
+  .contactTitle {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+    text-align: center;
+  }
+
+  .contactOptions {
+    display: flex;
+    justify-content: space-around;
+
+    .contactOption {
+      text-align: center;
+
+      .contactIcon {
+        font-size: 48rpx;
+        margin-bottom: $spacing-xs;
+      }
+
+      .contactLabel {
+        font-size: $font-size-xs;
+        color: $color-text-tertiary;
+        margin-bottom: 4rpx;
+      }
+
+      .contactValue {
+        font-size: $font-size-xs;
+        color: $color-text-secondary;
+      }
+    }
+  }
+}
+
+.feedbackSection {
+  flex: 1;
+  height: 0;
+}
+
+.feedbackForm {
+  padding: $spacing-lg;
+}
+
+.formGroup {
+  margin-bottom: $spacing-xl;
+
+  .formLabel {
+    display: block;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-sm;
+  }
+}
+
+.typeGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-sm;
+
+  .typeItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-md 0;
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    border: 2rpx solid transparent;
+
+    &.selected {
+      background: rgba(46, 125, 50, 0.1);
+      border-color: $color-primary;
+
+      .typeLabel {
+        color: $color-primary;
+      }
+    }
+
+    .typeIcon {
+      font-size: 40rpx;
+    }
+
+    .typeLabel {
+      font-size: $font-size-xs;
+      color: $color-text-secondary;
+    }
+  }
+}
+
+.textarea {
+  width: 100%;
+  height: 240rpx;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  font-size: $font-size-sm;
+  box-sizing: border-box;
+}
+
+.charCount {
+  text-align: right;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-xs;
+}
+
+.formInput {
+  width: 100%;
+  height: 80rpx;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: 0 $spacing-md;
+  font-size: $font-size-sm;
+}
+
+.submitBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-lg;
+  background: $color-primary-gradient;
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  margin-top: $spacing-xl;
+}
+
+.feedbackTips {
+  margin-top: $spacing-xl;
+  padding: $spacing-md;
+  background: rgba(255, 152, 0, 0.1);
+  border-radius: $radius-md;
+
+  .tipsTitle {
+    display: block;
+    font-size: $font-size-sm;
+    color: $color-warning;
+    font-weight: $font-weight-medium;
+    margin-bottom: $spacing-xs;
+  }
+
+  .tipsText {
+    display: block;
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    line-height: 1.8;
+  }
+}

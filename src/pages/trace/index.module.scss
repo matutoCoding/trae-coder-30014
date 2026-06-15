@@ -5,41 +5,364 @@
   background: $color-bg-page;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: $spacing-xl;
-  
-  .icon {
-    font-size: 160rpx;
-    margin-bottom: $spacing-xl;
-  }
-  
-  .title {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-semibold;
-    color: $color-text-primary;
-    margin-bottom: $spacing-md;
-  }
-  
-  .desc {
-    font-size: $font-size-md;
-    color: $color-text-tertiary;
+}
+
+.tabHeader {
+  display: flex;
+  background: $color-bg-card;
+  padding: 0 $spacing-lg;
+  border-bottom: 1rpx solid $color-divider;
+
+  .tabItem {
+    flex: 1;
     text-align: center;
-    line-height: 1.6;
-    margin-bottom: $spacing-xl;
+    padding: $spacing-md 0;
+    font-size: $font-size-md;
+    color: $color-text-secondary;
+    position: relative;
+
+    &.active {
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60rpx;
+        height: 6rpx;
+        background: $color-primary;
+        border-radius: 3rpx;
+      }
+    }
   }
-  
-  .backBtn {
+}
+
+.querySection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-lg;
+}
+
+.searchBox {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+
+  .searchInput {
+    flex: 1;
+    height: 80rpx;
+    background: $color-bg-card;
+    border-radius: $radius-button;
+    padding: 0 $spacing-md;
+    font-size: $font-size-sm;
+    border: 2rpx solid $color-divider;
+  }
+
+  .searchBtn {
     @include button-reset;
-    height: $button-height-md;
-    padding: 0 $spacing-xl;
+    width: 160rpx;
+    height: 80rpx;
     background: $color-primary-gradient;
     color: $color-text-white;
     border-radius: $radius-button;
     font-size: $font-size-md;
-    
-    &:active {
-      opacity: 0.9;
+  }
+}
+
+.scanBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-lg;
+  box-shadow: $shadow-card;
+
+  .scanIcon {
+    font-size: 40rpx;
+  }
+
+  .scanText {
+    font-size: $font-size-md;
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.notFound {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 200rpx;
+
+  .notFoundIcon {
+    font-size: 120rpx;
+    margin-bottom: $spacing-lg;
+  }
+
+  .notFoundText {
+    font-size: $font-size-lg;
+    color: $color-text-primary;
+    margin-bottom: $spacing-sm;
+  }
+
+  .notFoundDesc {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+  }
+}
+
+.traceResult {
+  flex: 1;
+  height: 0;
+}
+
+.productHeader {
+  background: $color-primary-gradient;
+  padding: $spacing-xl $spacing-lg;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-lg;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  .productInfo {
+    flex: 1;
+
+    .productName {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: $color-text-white;
+      margin-bottom: $spacing-sm;
+    }
+
+    .traceCode {
+      font-size: $font-size-sm;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 4rpx;
+    }
+
+    .batchNo {
+      font-size: $font-size-xs;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+
+  .qualityBadge {
+    display: flex;
+    align-items: center;
+    gap: 4rpx;
+    padding: $spacing-xs $spacing-sm;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: $radius-button;
+    color: $color-text-white;
+    font-size: $font-size-xs;
+  }
+}
+
+.timeline {
+  position: relative;
+  padding-left: 60rpx;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 24rpx;
+    top: 20rpx;
+    bottom: 20rpx;
+    width: 4rpx;
+    background: $color-divider;
+  }
+}
+
+.timelineItem {
+  position: relative;
+  margin-bottom: $spacing-lg;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.timelineDot {
+  position: absolute;
+  left: -48rpx;
+  top: 0;
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: $color-bg-card;
+  border: 4rpx solid $color-divider;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  z-index: 1;
+
+  &.completed {
+    background: $color-primary;
+    border-color: $color-primary;
+  }
+}
+
+.timelineContent {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.timelineHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+
+  .timelineTitle {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  .timelineDate {
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+  }
+}
+
+.timelineDetail {
+  .detailRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-xs 0;
+
+    .detailLabel {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+    }
+
+    .detailValue {
+      font-size: $font-size-sm;
+      color: $color-text-primary;
+
+      &.pass {
+        color: $color-success;
+        font-weight: $font-weight-semibold;
+      }
+    }
+  }
+}
+
+.manageSection {
+  flex: 1;
+  padding: $spacing-lg;
+}
+
+.manageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+
+  .manageTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+  }
+
+  .generateBtn {
+    @include button-reset;
+    height: 64rpx;
+    padding: 0 $spacing-lg;
+    background: $color-primary-gradient;
+    color: $color-text-white;
+    border-radius: $radius-button;
+    font-size: $font-size-sm;
+  }
+}
+
+.manageStats {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+
+  .statItem {
+    flex: 1;
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: $spacing-lg;
+    text-align: center;
+    box-shadow: $shadow-card;
+
+    .statValue {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
+      color: $color-primary;
+      margin-bottom: $spacing-xs;
+    }
+
+    .statLabel {
+      font-size: $font-size-xs;
+      color: $color-text-secondary;
+    }
+  }
+}
+
+.batchList {
+  .listTitle {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+  }
+
+  .batchItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: $spacing-md $spacing-lg;
+    margin-bottom: $spacing-sm;
+    box-shadow: $shadow-card;
+
+    .batchInfo {
+      .batchCode {
+        font-size: $font-size-md;
+        font-weight: $font-weight-medium;
+        color: $color-text-primary;
+        margin-bottom: 4rpx;
+      }
+
+      .batchOrder {
+        font-size: $font-size-xs;
+        color: $color-text-tertiary;
+      }
+    }
+
+    .statusTag {
+      font-size: $font-size-xs;
+      padding: $spacing-xs $spacing-sm;
+      border-radius: $radius-sm;
+
+      &.used {
+        background: rgba(76, 175, 80, 0.1);
+        color: $color-success;
+      }
+
+      &.unused {
+        background: rgba(255, 152, 0, 0.1);
+        color: $color-warning;
+      }
     }
   }
 }

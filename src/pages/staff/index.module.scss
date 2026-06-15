@@ -1,0 +1,490 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: $color-primary-gradient;
+  padding: $spacing-lg;
+  padding-top: calc($spacing-lg + env(safe-area-inset-top));
+  color: $color-text-white;
+
+  .title {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-lg;
+  }
+
+  .statsRow {
+    display: flex;
+    gap: $spacing-sm;
+
+    .statItem {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: $radius-lg;
+      padding: $spacing-md;
+      text-align: center;
+
+      .statValue {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-bold;
+        margin-bottom: 4rpx;
+
+        &.green {
+          color: #A5D6A7;
+        }
+
+        &.orange {
+          color: #FFCC80;
+        }
+      }
+
+      .statLabel {
+        font-size: $font-size-xs;
+        opacity: 0.9;
+      }
+    }
+  }
+}
+
+.searchBar {
+  display: flex;
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg;
+  background: $color-bg-card;
+  border-bottom: 1rpx solid $color-divider;
+
+  .searchInput {
+    flex: 1;
+    height: 72rpx;
+    background: $color-bg-page;
+    border-radius: $radius-button;
+    padding: 0 $spacing-md;
+    font-size: $font-size-sm;
+  }
+
+  .addBtn {
+    @include button-reset;
+    height: 72rpx;
+    padding: 0 $spacing-md;
+    background: $color-primary;
+    color: $color-text-white;
+    border-radius: $radius-button;
+    font-size: $font-size-sm;
+  }
+}
+
+.departmentBar {
+  white-space: nowrap;
+  padding: $spacing-sm $spacing-lg;
+  background: $color-bg-card;
+  border-bottom: 1rpx solid $color-divider;
+
+  .deptItem {
+    display: inline-block;
+    padding: $spacing-xs $spacing-md;
+    margin-right: $spacing-sm;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    background: $color-bg-page;
+    border-radius: $radius-button;
+
+    &.active {
+      background: $color-primary;
+      color: $color-text-white;
+    }
+  }
+}
+
+.staffList {
+  flex: 1;
+  height: 0;
+  padding: $spacing-md $spacing-lg;
+}
+
+.staffCard {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  margin-bottom: $spacing-sm;
+  box-shadow: $shadow-card;
+
+  .avatar {
+    width: 96rpx;
+    height: 96rpx;
+    border-radius: 50%;
+    background: rgba(46, 125, 50, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48rpx;
+    flex-shrink: 0;
+  }
+
+  .staffInfo {
+    flex: 1;
+    min-width: 0;
+
+    .staffHeader {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      margin-bottom: $spacing-xs;
+
+      .staffName {
+        font-size: $font-size-md;
+        font-weight: $font-weight-semibold;
+        color: $color-text-primary;
+      }
+    }
+
+    .staffRole {
+      font-size: $font-size-xs;
+      color: $color-text-secondary;
+      margin-bottom: $spacing-xs;
+    }
+
+    .staffMeta {
+      display: flex;
+      justify-content: space-between;
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+
+      .salary {
+        color: $color-error;
+        font-weight: $font-weight-medium;
+      }
+    }
+  }
+
+  .arrow {
+    font-size: 40rpx;
+    color: $color-text-tertiary;
+    flex-shrink: 0;
+  }
+}
+
+.statusTag {
+  font-size: 20rpx;
+  padding: 4rpx $spacing-sm;
+  border-radius: $radius-sm;
+
+  &.active {
+    background: rgba(76, 175, 80, 0.1);
+    color: $color-success;
+  }
+
+  &.leave {
+    background: rgba(255, 152, 0, 0.1);
+    color: $color-warning;
+  }
+
+  &.off {
+    background: rgba(134, 144, 156, 0.1);
+    color: $color-text-tertiary;
+  }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+
+  .emptyIcon {
+    font-size: 120rpx;
+    margin-bottom: $spacing-md;
+  }
+
+  .emptyText {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+  }
+}
+
+.detailModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg;
+}
+
+.detailContent {
+  width: 100%;
+  max-height: 80vh;
+  background: $color-bg-card;
+  border-radius: $radius-xl;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  padding: $spacing-xl $spacing-lg;
+  background: $color-primary-gradient;
+  color: $color-text-white;
+
+  .detailAvatar {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60rpx;
+    flex-shrink: 0;
+  }
+
+  .detailInfo {
+    flex: 1;
+
+    .detailName {
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
+      margin-bottom: $spacing-xs;
+    }
+
+    .detailRole {
+      font-size: $font-size-sm;
+      opacity: 0.9;
+      margin-bottom: $spacing-sm;
+    }
+  }
+
+  .detailStatus {
+    font-size: $font-size-xs;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-sm;
+    display: inline-block;
+
+    &.active {
+      background: rgba(76, 175, 80, 0.3);
+      color: #A5D6A7;
+    }
+
+    &.leave {
+      background: rgba(255, 152, 0, 0.3);
+      color: #FFCC80;
+    }
+
+    &.off {
+      background: rgba(134, 144, 156, 0.3);
+      color: #BDBDBD;
+    }
+  }
+}
+
+.detailBody {
+  flex: 1;
+  height: 0;
+  padding: $spacing-lg;
+}
+
+.detailSection {
+  margin-bottom: $spacing-xl;
+
+  .sectionTitle {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-md;
+  }
+}
+
+.infoList {
+  background: $color-bg-page;
+  border-radius: $radius-lg;
+  overflow: hidden;
+
+  .infoRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-md;
+    border-bottom: 1rpx solid $color-divider;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .infoLabel {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+    }
+
+    .infoValue {
+      font-size: $font-size-sm;
+      color: $color-text-primary;
+    }
+  }
+}
+
+.actionList {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+
+  .actionItem {
+    text-align: center;
+    padding: $spacing-md 0;
+    background: $color-bg-page;
+    border-radius: $radius-lg;
+
+    .actionIcon {
+      font-size: 48rpx;
+      margin-bottom: $spacing-xs;
+    }
+
+    .actionText {
+      font-size: $font-size-xs;
+      color: $color-text-secondary;
+    }
+  }
+}
+
+.detailFooter {
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
+  border-top: 1rpx solid $color-divider;
+
+  .closeDetailBtn {
+    @include button-reset;
+    width: 100%;
+    height: $button-height-md;
+    background: $color-bg-page;
+    color: $color-text-secondary;
+    border-radius: $radius-button;
+    font-size: $font-size-md;
+  }
+}
+
+.closeBtn {
+  position: absolute;
+  top: $spacing-md;
+  right: $spacing-md;
+  width: 48rpx;
+  height: 48rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-white;
+  font-size: $font-size-sm;
+  z-index: 10;
+}
+
+.addModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+}
+
+.addContent {
+  width: 100%;
+  max-height: 75vh;
+  background: $color-bg-card;
+  border-radius: $radius-xl $radius-xl 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.addHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-lg;
+  border-bottom: 1rpx solid $color-divider;
+
+  .addTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+  }
+
+  .addClose {
+    font-size: 40rpx;
+    color: $color-text-tertiary;
+    padding: $spacing-xs;
+  }
+}
+
+.addBody {
+  flex: 1;
+  height: 0;
+  padding: $spacing-lg;
+}
+
+.formItem {
+  margin-bottom: $spacing-lg;
+
+  .formLabel {
+    display: block;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-sm;
+  }
+
+  .formInput {
+    width: 100%;
+    height: 80rpx;
+    background: $color-bg-page;
+    border-radius: $radius-md;
+    padding: 0 $spacing-md;
+    font-size: $font-size-sm;
+  }
+}
+
+.addFooter {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+  border-top: 1rpx solid $color-divider;
+  padding-bottom: calc($spacing-lg + env(safe-area-inset-bottom));
+
+  .cancelBtn,
+  .confirmBtn {
+    @include button-reset;
+    flex: 1;
+    height: $button-height-md;
+    border-radius: $radius-button;
+    font-size: $font-size-md;
+  }
+
+  .cancelBtn {
+    background: $color-bg-page;
+    color: $color-text-secondary;
+  }
+
+  .confirmBtn {
+    background: $color-primary-gradient;
+    color: $color-text-white;
+  }
+}

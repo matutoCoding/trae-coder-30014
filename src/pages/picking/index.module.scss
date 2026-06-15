@@ -5,41 +5,457 @@
   background: $color-bg-page;
   display: flex;
   flex-direction: column;
+}
+
+.tabBar {
+  display: flex;
+  background: white;
+  box-shadow: $shadow-sm;
+}
+
+.tabItem {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  position: relative;
+  
+  &.active {
+    color: $color-primary;
+    font-weight: $font-weight-semibold;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60rpx;
+      height: 6rpx;
+      background: $color-primary;
+      border-radius: 3rpx;
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.filterSection {
+  background: white;
+  padding: $spacing-md;
+  box-shadow: $shadow-sm;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  background: $color-bg-page;
+  border-radius: $radius-button;
+  padding: 0 $spacing-md;
+  height: $button-height-md;
+  margin-bottom: $spacing-md;
+}
+
+.searchIcon {
+  font-size: 28rpx;
+  margin-right: $spacing-sm;
+}
+
+.searchInput {
+  flex: 1;
+  font-size: $font-size-md;
+  background: transparent;
+}
+
+.typeScroll {
+  white-space: nowrap;
+}
+
+.typeTag {
+  display: inline-block;
+  padding: $spacing-xs $spacing-md;
+  margin-right: $spacing-sm;
+  background: $color-bg-page;
+  border-radius: $radius-button;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  
+  &.typeActive {
+    background: $color-primary;
+    color: white;
+  }
+}
+
+.statsRow {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-md;
+}
+
+.statCard {
+  flex: 1;
+  background: white;
+  border-radius: $radius-card;
+  padding: $spacing-lg;
+  box-shadow: $shadow-sm;
+  text-align: center;
+}
+
+.statValue {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  display: block;
+  margin-bottom: $spacing-xs;
+}
+
+.statLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.listScroll {
+  flex: 1;
+  padding: 0 $spacing-md;
+}
+
+.listHeader {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-md;
+}
+
+.recordCard {
+  background: white;
+  border-radius: $radius-card;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-sm;
+}
+
+.recordHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-md;
+  border-bottom: 1rpx solid $color-border-light;
+}
+
+.batchNo {
+  font-family: monospace;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.recordInfo {
+  margin-bottom: $spacing-md;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-xs;
+}
+
+.infoLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.infoValue {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.infoValueHighlight {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
+
+.recordFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: $spacing-md;
+  border-top: 1rpx solid $color-border-light;
+}
+
+.pickers {
+  flex: 1;
+  min-width: 0;
+}
+
+.pickerLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.pickerNames {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  @include text-ellipsis(1);
+}
+
+.earlySpring {
+  background: rgba(255, 215, 0, 0.15);
+  color: #FFD700;
+}
+
+.beforeRain {
+  background: rgba(156, 39, 176, 0.15);
+  color: #9C27B0;
+}
+
+.autumn {
+  background: rgba(255, 152, 0, 0.15);
+  color: #FF9800;
+}
+
+.excellent {
+  background: rgba(255, 215, 0, 0.15);
+  color: #D4A600;
+}
+
+.good {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.normal {
+  background: rgba(158, 158, 158, 0.15);
+  color: #9E9E9E;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-xxl * 2;
+}
+
+.emptyIcon {
+  font-size: 120rpx;
+  margin-bottom: $spacing-md;
+  opacity: 0.5;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.formPage {
+  flex: 1;
+  padding: $spacing-md;
+}
+
+.formCard {
+  background: white;
+  border-radius: $radius-card;
+  padding: $spacing-lg;
+  box-shadow: $shadow-sm;
+}
+
+.formTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+  text-align: center;
+}
+
+.formItem {
+  margin-bottom: $spacing-lg;
+}
+
+.formRow {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.formItemHalf {
+  flex: 1;
+}
+
+.formLabel {
+  display: block;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.required {
+  color: #F44336;
+}
+
+.formInput {
+  width: 100%;
+  height: $button-height-md;
+  padding: 0 $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  font-size: $font-size-md;
+  box-sizing: border-box;
+}
+
+.plotScroll {
+  white-space: nowrap;
+}
+
+.plotOption {
+  display: inline-flex;
+  padding: $spacing-sm $spacing-lg;
+  margin-right: $spacing-sm;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border: 2rpx solid transparent;
+  
+  &.plotSelected {
+    background: rgba(46, 125, 50, 0.1);
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+}
+
+.teaTypeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-md;
+}
+
+.teaTypeOption {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  border: 2rpx solid transparent;
+  
+  &.teaTypeSelected {
+    background: rgba(46, 125, 50, 0.05);
+  }
+}
+
+.teaTypeDot {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+}
+
+.pickerGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+}
+
+.pickerOption {
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: $spacing-xl;
+  gap: $spacing-xs;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border: 2rpx solid transparent;
+  position: relative;
   
-  .icon {
-    font-size: 160rpx;
-    margin-bottom: $spacing-xl;
+  &.pickerSelected {
+    background: rgba(46, 125, 50, 0.1);
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+}
+
+.checkMark {
+  font-size: $font-size-sm;
+  color: $color-primary;
+}
+
+.gradeScroll {
+  white-space: nowrap;
+}
+
+.gradeOption {
+  display: inline-flex;
+  padding: $spacing-sm $spacing-md;
+  margin-right: $spacing-sm;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border: 2rpx solid transparent;
+  
+  &.gradeSelected {
+    background: rgba(46, 125, 50, 0.1);
+    border-color: $color-primary;
+    color: $color-primary;
+  }
+}
+
+.qualityRow {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.qualityOption {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-md;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  
+  &.excellent {
+    background: rgba(255, 215, 0, 0.15);
+    color: #D4A600;
+    font-weight: $font-weight-medium;
   }
   
-  .title {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-semibold;
-    color: $color-text-primary;
-    margin-bottom: $spacing-md;
+  &.good {
+    background: rgba(76, 175, 80, 0.15);
+    color: #4CAF50;
+    font-weight: $font-weight-medium;
   }
   
-  .desc {
-    font-size: $font-size-md;
-    color: $color-text-tertiary;
-    text-align: center;
-    line-height: 1.6;
-    margin-bottom: $spacing-xl;
+  &.normal {
+    background: rgba(158, 158, 158, 0.15);
+    color: #9E9E9E;
+    font-weight: $font-weight-medium;
   }
+}
+
+.submitSection {
+  padding: $spacing-lg 0;
+}
+
+.submitBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-lg;
+  background: $color-primary-gradient;
+  color: white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
   
-  .backBtn {
-    @include button-reset;
-    height: $button-height-md;
-    padding: 0 $spacing-xl;
-    background: $color-primary-gradient;
-    color: $color-text-white;
-    border-radius: $radius-button;
-    font-size: $font-size-md;
-    
-    &:active {
-      opacity: 0.9;
-    }
+  &:active {
+    opacity: 0.9;
   }
 }

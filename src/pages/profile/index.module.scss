@@ -1,0 +1,197 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: $color-primary-gradient;
+  padding: $spacing-xl $spacing-lg;
+  padding-top: calc($spacing-xl + env(safe-area-inset-top));
+  text-align: center;
+  color: $color-text-white;
+}
+
+.avatarSection {
+  margin-bottom: $spacing-lg;
+
+  .avatar {
+    width: 160rpx;
+    height: 160rpx;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto $spacing-sm;
+    border: 4rpx solid rgba(255, 255, 255, 0.3);
+
+    .avatarText {
+      font-size: 80rpx;
+    }
+  }
+
+  .changeAvatarText {
+    font-size: $font-size-xs;
+    opacity: 0.9;
+  }
+}
+
+.userInfo {
+  .userName {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-xs;
+  }
+
+  .userRole {
+    font-size: $font-size-sm;
+    opacity: 0.9;
+  }
+}
+
+.content {
+  flex: 1;
+  height: 0;
+  padding: $spacing-lg;
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.infoSection,
+.securitySection,
+.statsSection {
+  margin-bottom: $spacing-xl;
+}
+
+.infoList {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .infoLabel {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    flex-shrink: 0;
+    width: 160rpx;
+  }
+
+  .infoValue {
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    flex: 1;
+    text-align: right;
+  }
+
+  .infoInput {
+    flex: 1;
+    height: 56rpx;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    text-align: right;
+    background: $color-bg-page;
+    border-radius: $radius-sm;
+    padding: 0 $spacing-sm;
+  }
+
+  .infoArrow {
+    font-size: 32rpx;
+    color: $color-text-tertiary;
+    margin-left: $spacing-sm;
+  }
+
+  .infoRight {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-sm;
+
+  .statItem {
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: $spacing-md 0;
+    text-align: center;
+    box-shadow: $shadow-card;
+
+    .statValue {
+      display: block;
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: $color-primary;
+      margin-bottom: $spacing-xs;
+    }
+
+    .statLabel {
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+    }
+  }
+}
+
+.footer {
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
+  background: $color-bg-card;
+  border-top: 1rpx solid $color-divider;
+}
+
+.editBtn {
+  @include button-reset;
+  width: 100%;
+  height: $button-height-md;
+  background: $color-primary-gradient;
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+}
+
+.btnGroup {
+  display: flex;
+  gap: $spacing-md;
+
+  .cancelBtn,
+  .saveBtn {
+    @include button-reset;
+    flex: 1;
+    height: $button-height-md;
+    border-radius: $radius-button;
+    font-size: $font-size-md;
+  }
+
+  .cancelBtn {
+    background: $color-bg-page;
+    color: $color-text-secondary;
+  }
+
+  .saveBtn {
+    background: $color-primary-gradient;
+    color: $color-text-white;
+  }
+}

@@ -5,38 +5,303 @@
   background: $color-bg-page;
   display: flex;
   flex-direction: column;
+}
+
+/* 滚动容器 */
+.scrollContainer {
+  flex: 1;
+  height: 0;
+  padding-bottom: 140rpx;
+}
+
+/* 加载中 */
+.loading {
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: $spacing-xl;
+  min-height: 100vh;
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+/* 订单状态头部 */
+.statusHeader {
+  background: $color-primary-gradient;
+  padding: $spacing-xl $spacing-lg;
+  color: $color-text-white;
   
-  .icon {
-    font-size: 160rpx;
-    margin-bottom: $spacing-xl;
+  .statusBadge {
+    display: inline-block;
+    font-size: $font-size-md;
+    font-weight: $font-weight-bold;
+    padding: $spacing-xs $spacing-md;
+    border-radius: $radius-button;
+    background: rgba(255, 255, 255, 0.2);
+    margin-bottom: $spacing-md;
+    
+    &.pending {
+      background: rgba(255, 152, 0, 0.3);
+    }
+    
+    &.paid {
+      background: rgba(33, 150, 243, 0.3);
+    }
+    
+    &.shipping {
+      background: rgba(156, 39, 176, 0.3);
+    }
+    
+    &.completed {
+      background: rgba(76, 175, 80, 0.3);
+    }
+    
+    &.cancelled {
+      background: rgba(244, 67, 54, 0.3);
+    }
   }
   
-  .title {
-    font-size: $font-size-xl;
+  .orderNo {
+    font-size: $font-size-sm;
+    opacity: 0.9;
+    margin-bottom: $spacing-xs;
+  }
+  
+  .orderTime {
+    font-size: $font-size-xs;
+    opacity: 0.8;
+  }
+}
+
+/* 通用区块 */
+.section {
+  background: $color-bg-card;
+  margin: $spacing-md $spacing-lg;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  
+  .sectionHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: $spacing-md;
+    padding-bottom: $spacing-md;
+    border-bottom: 1rpx solid $color-divider;
+    
+    .sectionIcon {
+      font-size: 32rpx;
+      margin-right: $spacing-sm;
+    }
+    
+    .sectionTitle {
+      font-size: $font-size-md;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+    }
+  }
+}
+
+/* 收货信息 */
+.receiverInfo {
+  .receiverRow {
+    display: flex;
+    align-items: center;
+    margin-bottom: $spacing-sm;
+    
+    .receiverName {
+      font-size: $font-size-md;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+      margin-right: $spacing-lg;
+    }
+    
+    .receiverPhone {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+    }
+  }
+  
+  .receiverAddress {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: 1.6;
+  }
+}
+
+/* 商品列表 */
+.productList {
+  .productItem {
+    padding: $spacing-md 0;
+    border-bottom: 1rpx solid $color-divider;
+    
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    &:first-child {
+      padding-top: 0;
+    }
+    
+    .productInfo {
+      margin-bottom: $spacing-sm;
+      
+      .productName {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $color-text-primary;
+        margin-bottom: 4rpx;
+      }
+      
+      .productType {
+        font-size: $font-size-xs;
+        color: $color-text-tertiary;
+      }
+    }
+    
+    .productPrice {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: $spacing-sm;
+      
+      .unitPrice {
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+      }
+      
+      .quantity {
+        font-size: $font-size-sm;
+        color: $color-text-tertiary;
+      }
+    }
+    
+    .subtotal {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: $spacing-sm;
+      
+      .subtotalLabel {
+        font-size: $font-size-xs;
+        color: $color-text-tertiary;
+      }
+      
+      .subtotalValue {
+        font-size: $font-size-md;
+        font-weight: $font-weight-semibold;
+        color: $color-error;
+      }
+    }
+  }
+}
+
+/* 金额汇总 */
+.amountSummary {
+  .amountRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-sm;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .amountLabel {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+    }
+    
+    .amountValue {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      
+      &.discount {
+        color: $color-success;
+      }
+    }
+  }
+  
+  .amountDivider {
+    height: 1rpx;
+    background: $color-divider;
+    margin: $spacing-md 0;
+  }
+  
+  .totalLabel {
+    font-size: $font-size-md;
     font-weight: $font-weight-semibold;
     color: $color-text-primary;
-    margin-bottom: $spacing-md;
   }
   
-  .desc {
-    font-size: $font-size-md;
-    color: $color-text-tertiary;
-    text-align: center;
-    line-height: 1.6;
-    margin-bottom: $spacing-xl;
+  .totalValue {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-error;
   }
+}
+
+/* 订单信息 */
+.orderInfo {
+  .infoRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $spacing-sm;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .infoLabel {
+      font-size: $font-size-sm;
+      color: $color-text-tertiary;
+      flex-shrink: 0;
+    }
+    
+    .infoValue {
+      font-size: $font-size-sm;
+      color: $color-text-secondary;
+      text-align: right;
+      flex: 1;
+      margin-left: $spacing-lg;
+      line-height: 1.5;
+    }
+  }
+}
+
+/* 底部操作栏 */
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $color-bg-card;
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc($spacing-md + env(safe-area-inset-bottom));
+  display: flex;
+  gap: $spacing-md;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  z-index: 100;
   
-  .backBtn {
+  .actionBtn {
     @include button-reset;
+    flex: 1;
     height: $button-height-md;
-    padding: 0 $spacing-xl;
-    background: $color-primary-gradient;
-    color: $color-text-white;
     border-radius: $radius-button;
     font-size: $font-size-md;
+    font-weight: $font-weight-medium;
+    
+    &.primaryBtn {
+      background: $color-primary-gradient;
+      color: $color-text-white;
+    }
+    
+    &.secondaryBtn {
+      background: $color-bg-card;
+      color: $color-primary;
+      border: 2rpx solid $color-primary;
+    }
     
     &:active {
       opacity: 0.9;

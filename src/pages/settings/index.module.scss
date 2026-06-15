@@ -1,0 +1,108 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  height: 0;
+  padding: $spacing-lg;
+}
+
+.group {
+  margin-bottom: $spacing-xl;
+
+  .groupTitle {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+    margin-bottom: $spacing-sm;
+    padding-left: $spacing-xs;
+  }
+}
+
+.groupContent {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.settingItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md $spacing-lg;
+  border-bottom: 1rpx solid $color-divider;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &.clickable {
+    cursor: pointer;
+
+    &:active {
+      background: $color-bg-page;
+    }
+  }
+
+  .settingInfo {
+    flex: 1;
+    min-width: 0;
+
+    .settingName {
+      font-size: $font-size-md;
+      color: $color-text-primary;
+      margin-bottom: 4rpx;
+    }
+
+    .settingDesc {
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+    }
+  }
+
+  .arrow {
+    font-size: 36rpx;
+    color: $color-text-tertiary;
+    margin-left: $spacing-sm;
+  }
+}
+
+.logoutSection {
+  margin: $spacing-xl 0;
+
+  .logoutBtn {
+    @include button-reset;
+    width: 100%;
+    height: $button-height-md;
+    background: $color-bg-card;
+    color: $color-error;
+    border-radius: $radius-lg;
+    font-size: $font-size-md;
+    box-shadow: $shadow-card;
+  }
+}
+
+.versionSection {
+  text-align: center;
+  padding: $spacing-lg 0;
+
+  .versionText {
+    display: block;
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+    margin-bottom: $spacing-xs;
+  }
+
+  .copyrightText {
+    display: block;
+    font-size: $font-size-xs;
+    color: $color-text-tertiary;
+    opacity: 0.6;
+  }
+}

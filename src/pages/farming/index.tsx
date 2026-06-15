@@ -105,7 +105,11 @@ const FarmingPage: React.FC = () => {
 
   const handlePickingClick = (picking: PickingRecord) => {
     console.log('[FarmingPage] 查看采摘记录:', picking.batchNo);
-    Taro.showToast({ title: '批次：' + picking.batchNo, icon: 'none' });
+    Taro.navigateTo({ 
+      url: `/pages/picking/index?id=${picking.id}` 
+    }).catch((err) => {
+      console.error('[FarmingPage] 跳转失败:', err);
+    });
   };
 
   return (

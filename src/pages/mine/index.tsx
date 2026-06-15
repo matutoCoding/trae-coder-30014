@@ -84,28 +84,28 @@ const MinePage: React.FC = () => {
           desc: '修改个人资料和密码',
           icon: '👤',
           color: 'rgba(46, 125, 50, 0.1)',
-          page: '/pages/mine/index'
+          page: '/pages/profile/index'
         },
         {
           name: '员工管理',
           desc: '管理采茶工和制茶师',
           icon: '👥',
           color: 'rgba(141, 110, 99, 0.1)',
-          page: '/pages/mine/index'
+          page: '/pages/staff/index'
         },
         {
           name: '系统设置',
           desc: '通知、隐私、关于我们',
           icon: '⚙️',
           color: 'rgba(134, 144, 156, 0.1)',
-          page: '/pages/mine/index'
+          page: '/pages/settings/index'
         },
         {
           name: '帮助与反馈',
           desc: '使用指南和问题反馈',
           icon: '❓',
           color: 'rgba(33, 150, 243, 0.1)',
-          page: '/pages/mine/index'
+          page: '/pages/help/index'
         }
       ]
     }
