@@ -459,3 +459,158 @@
     opacity: 0.9;
   }
 }
+
+.detailPage {
+  min-height: 100vh;
+  background: $color-bg-page;
+  display: flex;
+  flex-direction: column;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md;
+  background: white;
+  box-shadow: $shadow-sm;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm;
+}
+
+.backIcon {
+  font-size: 48rpx;
+  color: $color-text-secondary;
+  line-height: 1;
+}
+
+.backText {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.detailTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.detailContent {
+  flex: 1;
+  padding: $spacing-md;
+}
+
+.detailBatchHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-radius: $radius-card;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-sm;
+}
+
+.detailBatchNo {
+  font-family: monospace;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.detailCard {
+  background: white;
+  border-radius: $radius-card;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-sm;
+}
+
+.detailCardTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-sm 0;
+  border-bottom: 1rpx solid $color-border-light;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.detailLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.detailValue {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.detailValueHighlight {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
+
+.detailPickers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.detailPickerTag {
+  padding: $spacing-xs $spacing-md;
+  background: rgba(46, 125, 50, 0.1);
+  color: $color-primary;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+}
+
+.detailFooter {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  background: white;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.detailBtnSecondary {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  background: white;
+  color: $color-text-secondary;
+  border: 2rpx solid $color-border;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+}
+
+.detailBtnPrimary {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  background: $color-primary-gradient;
+  color: white;
+  border-radius: $radius-button;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  
+  &:active {
+    opacity: 0.9;
+  }
+}

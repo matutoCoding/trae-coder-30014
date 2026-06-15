@@ -369,87 +369,254 @@ export const mockTeaTourProducts: TeaTourProduct[] = [
   }
 ];
 
-export const mockTraceInfo: TraceInfo = {
-  traceCode: 'TC202606140001',
-  batchNo: 'B20260614001',
-  productName: '明前茶-特级礼盒装',
-  teaPlot: {
-    name: '1号茶园',
-    area: 12.5,
-    variety: '福鼎大白茶',
-    altitude: 850
+export const mockTraceInfoMap: Record<string, TraceInfo> = {
+  'TC202606140001': {
+    traceCode: 'TC202606140001',
+    batchNo: 'B20260614001',
+    productName: '明前茶-特级礼盒装',
+    teaPlot: {
+      name: '1号茶园',
+      area: 12.5,
+      variety: '福鼎大白茶',
+      altitude: 850
+    },
+    picking: {
+      date: '2026-06-14',
+      type: '明前茶',
+      weight: 38.2,
+      pickers: ['张三', '李四']
+    },
+    processing: {
+      steps: [
+        {
+          name: '萎凋',
+          startTime: '2026-06-14 08:00',
+          endTime: '2026-06-14 14:30',
+          parameters: [
+            { name: '温度', value: '26', unit: '°C' },
+            { name: '湿度', value: '62', unit: '%' },
+            { name: '失水率', value: '19', unit: '%' }
+          ]
+        },
+        {
+          name: '杀青',
+          startTime: '2026-06-14 15:00',
+          endTime: '2026-06-14 16:30',
+          parameters: [
+            { name: '锅温', value: '225', unit: '°C' },
+            { name: '杀青时间', value: '7', unit: '分钟' }
+          ]
+        },
+        {
+          name: '揉捻',
+          startTime: '2026-06-14 17:00',
+          endTime: '2026-06-14 17:45',
+          parameters: [
+            { name: '揉捻时间', value: '45', unit: '分钟' },
+            { name: '细胞破碎率', value: '75', unit: '%' }
+          ]
+        },
+        {
+          name: '烘干',
+          startTime: '2026-06-14 18:00',
+          endTime: '2026-06-14 19:00',
+          parameters: [
+            { name: '初烘温度', value: '120', unit: '°C' },
+            { name: '复烘温度', value: '90', unit: '°C' },
+            { name: '含水率', value: '5.5', unit: '%' }
+          ]
+        },
+        {
+          name: '精制拼配',
+          startTime: '2026-06-15 09:30',
+          endTime: '2026-06-15 11:30',
+          parameters: [
+            { name: '拼配比例', value: '特级30%+一级70%', unit: '' },
+            { name: '提香温度', value: '110', unit: '°C' }
+          ]
+        }
+      ]
+    },
+    testing: {
+      date: '2026-06-15',
+      agency: '福建省茶叶质量检测中心',
+      result: 'pass',
+      reportUrl: ''
+    },
+    packaging: {
+      date: '2026-06-15',
+      spec: '250g/盒',
+      quantity: 78
+    },
+    logistics: {
+      company: '顺丰速运',
+      trackingNo: 'SF1234567890',
+      updateTime: '2026-06-16 10:30:00'
+    }
   },
-  picking: {
-    date: '2026-06-14',
-    type: '明前茶',
-    weight: 38.2,
-    pickers: ['张三', '李四']
+  'TC202606150001': {
+    traceCode: 'TC202606150001',
+    batchNo: 'B20260613001',
+    productName: '明前茶-特级品鉴装',
+    teaPlot: {
+      name: '3号茶园',
+      area: 8.5,
+      variety: '福鼎大白茶',
+      altitude: 920
+    },
+    picking: {
+      date: '2026-06-13',
+      type: '明前茶',
+      weight: 25.6,
+      pickers: ['王五', '赵六']
+    },
+    processing: {
+      steps: [
+        {
+          name: '萎凋',
+          startTime: '2026-06-13 07:30',
+          endTime: '2026-06-13 14:00',
+          parameters: [
+            { name: '温度', value: '25', unit: '°C' },
+            { name: '湿度', value: '65', unit: '%' },
+            { name: '失水率', value: '18', unit: '%' }
+          ]
+        },
+        {
+          name: '杀青',
+          startTime: '2026-06-13 14:30',
+          endTime: '2026-06-13 16:00',
+          parameters: [
+            { name: '锅温', value: '230', unit: '°C' },
+            { name: '杀青时间', value: '6', unit: '分钟' }
+          ]
+        },
+        {
+          name: '揉捻',
+          startTime: '2026-06-13 16:30',
+          endTime: '2026-06-13 17:15',
+          parameters: [
+            { name: '揉捻时间', value: '45', unit: '分钟' },
+            { name: '细胞破碎率', value: '78', unit: '%' }
+          ]
+        },
+        {
+          name: '烘干',
+          startTime: '2026-06-13 17:30',
+          endTime: '2026-06-13 18:30',
+          parameters: [
+            { name: '初烘温度', value: '118', unit: '°C' },
+            { name: '复烘温度', value: '88', unit: '°C' },
+            { name: '含水率', value: '5.2', unit: '%' }
+          ]
+        },
+        {
+          name: '精制拼配',
+          startTime: '2026-06-14 08:30',
+          endTime: '2026-06-14 10:30',
+          parameters: [
+            { name: '拼配比例', value: '特级40%+一级60%', unit: '' },
+            { name: '提香温度', value: '108', unit: '°C' }
+          ]
+        }
+      ]
+    },
+    testing: {
+      date: '2026-06-14',
+      agency: '福建省茶叶质量检测中心',
+      result: 'pass',
+      reportUrl: ''
+    },
+    packaging: {
+      date: '2026-06-14',
+      spec: '50g/罐',
+      quantity: 256
+    },
+    logistics: {
+      company: '圆通快递',
+      trackingNo: 'YT9876543210',
+      updateTime: '2026-06-16 08:30:00'
+    }
   },
-  processing: {
-    steps: [
-      {
-        name: '萎凋',
-        startTime: '2026-06-14 08:00',
-        endTime: '2026-06-14 14:30',
-        parameters: [
-          { name: '温度', value: '26', unit: '°C' },
-          { name: '湿度', value: '62', unit: '%' },
-          { name: '失水率', value: '19', unit: '%' }
-        ]
-      },
-      {
-        name: '杀青',
-        startTime: '2026-06-14 15:00',
-        endTime: '2026-06-14 16:30',
-        parameters: [
-          { name: '锅温', value: '225', unit: '°C' },
-          { name: '杀青时间', value: '7', unit: '分钟' }
-        ]
-      },
-      {
-        name: '揉捻',
-        startTime: '2026-06-14 17:00',
-        endTime: '2026-06-14 17:45',
-        parameters: [
-          { name: '揉捻时间', value: '45', unit: '分钟' },
-          { name: '细胞破碎率', value: '75', unit: '%' }
-        ]
-      },
-      {
-        name: '烘干',
-        startTime: '2026-06-14 18:00',
-        endTime: '2026-06-14 19:00',
-        parameters: [
-          { name: '初烘温度', value: '120', unit: '°C' },
-          { name: '复烘温度', value: '90', unit: '°C' },
-          { name: '含水率', value: '5.5', unit: '%' }
-        ]
-      },
-      {
-        name: '精制拼配',
-        startTime: '2026-06-15 09:30',
-        endTime: '2026-06-15 11:30',
-        parameters: [
-          { name: '拼配比例', value: '特级30%+一级70%', unit: '' },
-          { name: '提香温度', value: '110', unit: '°C' }
-        ]
-      }
-    ]
-  },
-  testing: {
-    date: '2026-06-15',
-    agency: '福建省茶叶质量检测中心',
-    result: 'pass',
-    reportUrl: ''
-  },
-  packaging: {
-    date: '2026-06-15',
-    spec: '250g/盒',
-    quantity: 78
-  },
-  logistics: {
-    company: '顺丰速运',
-    trackingNo: 'SF1234567890',
-    updateTime: '2026-06-16 10:30:00'
+  'TC202606160001': {
+    traceCode: 'TC202606160001',
+    batchNo: 'B20260614001',
+    productName: '明前茶-特级礼盒装',
+    teaPlot: {
+      name: '2号茶园',
+      area: 15.2,
+      variety: '福鼎大白茶',
+      altitude: 880
+    },
+    picking: {
+      date: '2026-06-14',
+      type: '明前茶',
+      weight: 42.5,
+      pickers: ['张三', '李四', '王五']
+    },
+    processing: {
+      steps: [
+        {
+          name: '萎凋',
+          startTime: '2026-06-14 08:30',
+          endTime: '2026-06-14 15:00',
+          parameters: [
+            { name: '温度', value: '27', unit: '°C' },
+            { name: '湿度', value: '60', unit: '%' },
+            { name: '失水率', value: '20', unit: '%' }
+          ]
+        },
+        {
+          name: '杀青',
+          startTime: '2026-06-14 15:30',
+          endTime: '2026-06-14 17:00',
+          parameters: [
+            { name: '锅温', value: '228', unit: '°C' },
+            { name: '杀青时间', value: '8', unit: '分钟' }
+          ]
+        },
+        {
+          name: '揉捻',
+          startTime: '2026-06-14 17:30',
+          endTime: '2026-06-14 18:15',
+          parameters: [
+            { name: '揉捻时间', value: '45', unit: '分钟' },
+            { name: '细胞破碎率', value: '76', unit: '%' }
+          ]
+        },
+        {
+          name: '烘干',
+          startTime: '2026-06-14 18:30',
+          endTime: '2026-06-14 19:30',
+          parameters: [
+            { name: '初烘温度', value: '122', unit: '°C' },
+            { name: '复烘温度', value: '92', unit: '°C' },
+            { name: '含水率', value: '5.3', unit: '%' }
+          ]
+        },
+        {
+          name: '精制拼配',
+          startTime: '2026-06-15 10:00',
+          endTime: '2026-06-15 12:00',
+          parameters: [
+            { name: '拼配比例', value: '特级35%+一级65%', unit: '' },
+            { name: '提香温度', value: '112', unit: '°C' }
+          ]
+        }
+      ]
+    },
+    testing: {
+      date: '2026-06-15',
+      agency: '福建省茶叶质量检测中心',
+      result: 'pass',
+      reportUrl: ''
+    },
+    packaging: {
+      date: '2026-06-15',
+      spec: '250g/盒',
+      quantity: 86
+    }
   }
 };
+
+export const mockTraceInfo: TraceInfo = mockTraceInfoMap['TC202606140001'];

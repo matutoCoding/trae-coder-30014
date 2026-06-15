@@ -3,8 +3,9 @@ import { View, Text, Button, Input, ScrollView } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import styles from './index.module.scss';
 import classnames from 'classnames';
-import { mockTraceInfo, mockOrderList } from '@/data/mockSales';
+import { mockTraceInfoMap, mockOrderList } from '@/data/mockSales';
 import { TraceInfo } from '@/types';
+import { storage } from '@/utils/storage';
 
 const TracePage: React.FC = () => {
   const router = useRouter();
@@ -25,6 +26,17 @@ const TracePage: React.FC = () => {
     }
   }, [router.params.code, router.params.tab]);
 
+  const findTraceInfo = (code: string): TraceInfo | null => {
+    if (mockTraceInfoMap[code]) {
+      return mockTraceInfoMap[code];
+    }
+    const stored = storage.getTraceInfo(code);
+    if (stored) {
+      return stored;
+    }
+    return null;
+  };
+
   const handleSearch = (code?: string) => {
     const searchCode = code || traceCode;
     if (!searchCode) {
@@ -32,11 +44,8 @@ const TracePage: React.FC = () => {
       return;
     }
     setSearched(true);
-    if (searchCode === mockTraceInfo.traceCode) {
-      setTraceInfo(mockTraceInfo);
-    } else {
-      setTraceInfo(null);
-    }
+    const info = findTraceInfo(searchCode);
+    setTraceInfo(info);
   };
 
   const handleScan = () => {

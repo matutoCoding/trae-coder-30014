@@ -1,10 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { View, Text, ScrollView, Input, Button } from '@tarojs/components';
 import Taro, { useRouter, useDidShow } from '@tarojs/taro';
 import styles from './index.module.scss';
 import classnames from 'classnames';
 import { mockFarmRecords, mockTeaPlots } from '@/data/mockFarming';
 import { FarmRecord } from '@/types';
+import { storage } from '@/utils/storage';
+import { generateId, formatDate } from '@/utils/index';
 
 const FarmRecordPage: React.FC = () => {
   const router = useRouter();
@@ -15,28 +17,49 @@ const FarmRecordPage: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [records, setRecords] = useState<FarmRecord[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'detail'>('list');
+  const [selectedRecord, setSelectedRecord] = useState<FarmRecord | null>(null);
   
   const [formData, setFormData] = useState({
     plotId: '',
     plotName: '',
     type: 'fertilize',
     typeName: '施肥',
-    date: new Date().toISOString().split('T')[0],
+    date: formatDate(),
     operator: '',
     quantity: '',
     unit: 'kg',
     description: ''
   });
 
+  useEffect(() => {
+    if (recordId) {
+      loadData();
+      setTimeout(() => {
+        const allRecords = storage.getAllFarmRecords(mockFarmRecords);
+        const record = allRecords.find(r => r.id === recordId);
+        if (record) {
+          setSelectedRecord(record);
+          setViewMode('detail');
+        }
+      }, 100);
+    }
+  }, [recordId]);
+
   useDidShow(() => {
-    setRecords(mockFarmRecords);
-    if (initialPlotId) {
+    loadData();
+    if (initialPlotId && viewMode === 'list') {
       const plot = mockTeaPlots.find(p => p.id === initialPlotId);
       if (plot) {
         setFormData(prev => ({ ...prev, plotId: plot.id, plotName: plot.name }));
       }
     }
   });
+
+  const loadData = () => {
+    const allRecords = storage.getAllFarmRecords(mockFarmRecords);
+    setRecords(allRecords);
+  };
 
   const typeFilters = [
     { key: 'all', label: '全部', icon: '📋' },
@@ -81,6 +104,17 @@ const FarmRecordPage: React.FC = () => {
   };
 
   const handleAdd = () => {
+    setFormData({
+      plotId: '',
+      plotName: '',
+      type: 'fertilize',
+      typeName: '施肥',
+      date: formatDate(),
+      operator: '',
+      quantity: '',
+      unit: 'kg',
+      description: ''
+    });
     setShowAddModal(true);
   };
 
@@ -103,7 +137,7 @@ const FarmRecordPage: React.FC = () => {
     }
     
     const newRecord: FarmRecord = {
-      id: Date.now().toString(),
+      id: generateId('FR'),
       plotId: formData.plotId,
       plotName: formData.plotName,
       type: formData.type as any,
@@ -117,7 +151,8 @@ const FarmRecordPage: React.FC = () => {
       temperature: 25
     };
     
-    setRecords(prev => [newRecord, ...prev]);
+    const allRecords = storage.addFarmRecord(newRecord, mockFarmRecords);
+    setRecords(allRecords);
     setShowAddModal(false);
     Taro.showToast({ title: '记录已添加', icon: 'success' });
     
@@ -126,7 +161,7 @@ const FarmRecordPage: React.FC = () => {
       plotName: '',
       type: 'fertilize',
       typeName: '施肥',
-      date: new Date().toISOString().split('T')[0],
+      date: formatDate(),
       operator: '',
       quantity: '',
       unit: 'kg',
@@ -135,16 +170,105 @@ const FarmRecordPage: React.FC = () => {
   };
 
   const handleViewRecord = (record: FarmRecord) => {
-    Taro.showModal({
-      title: record.typeName + '详情',
-      content: `地块：${record.plotName}\n日期：${record.date}\n操作人：${record.operator}\n${record.quantity ? `用量：${record.quantity}${record.unit}\n` : ''}描述：${record.description}\n天气：${record.weather} ${record.temperature}°C`,
-      showCancel: false
-    });
+    setSelectedRecord(record);
+    setViewMode('detail');
   };
 
-  return (
+  const handleBackToList = () => {
+    setSelectedRecord(null);
+    setViewMode('list');
+    if (recordId) {
+      Taro.navigateBack().catch(() => {
+        setViewMode('list');
+      });
+    }
+  };
+
+  const handleContinueAdd = () => {
+    setViewMode('list');
+    setShowAddModal(true);
+  };
+
+  const renderDetailView = () => {
+    if (!selectedRecord) return null;
+    
+    return (
+      <View className={styles.detailPage}>
+        <View className={styles.detailHeader}>
+          <View className={styles.backBtn} onClick={handleBackToList}>
+            <Text className={styles.backIcon}>‹</Text>
+            <Text className={styles.backText}>返回列表</Text>
+          </View>
+          <Text className={styles.detailTitle}>农事记录详情</Text>
+          <View style={{ width: 120 }} />
+        </View>
+
+        <ScrollView className={styles.detailContent} scrollY>
+          <View className={styles.detailTypeHeader}>
+            <View 
+              className={styles.detailTypeIcon}
+              style={{ backgroundColor: `${getTypeColor(selectedRecord.type)}15` }}
+            >
+              <Text style={{ fontSize: 48 }}>{getFarmTypeIcon(selectedRecord.type)}</Text>
+            </View>
+            <Text className={styles.detailTypeName}>{selectedRecord.typeName}</Text>
+            <Text className={styles.detailDate}>{selectedRecord.date}</Text>
+          </View>
+
+          <View className={styles.detailCard}>
+            <Text className={styles.detailCardTitle}>基本信息</Text>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>地块名称</Text>
+              <Text className={styles.detailValue}>{selectedRecord.plotName}</Text>
+            </View>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>操作人</Text>
+              <Text className={styles.detailValue}>{selectedRecord.operator}</Text>
+            </View>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>记录日期</Text>
+              <Text className={styles.detailValue}>{selectedRecord.date}</Text>
+            </View>
+            {selectedRecord.quantity && (
+              <View className={styles.detailRow}>
+                <Text className={styles.detailLabel}>用量</Text>
+                <Text className={styles.detailValue}>{selectedRecord.quantity}{selectedRecord.unit}</Text>
+              </View>
+            )}
+          </View>
+
+          <View className={styles.detailCard}>
+            <Text className={styles.detailCardTitle}>环境信息</Text>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>天气</Text>
+              <Text className={styles.detailValue}>{selectedRecord.weather}</Text>
+            </View>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>气温</Text>
+              <Text className={styles.detailValue}>{selectedRecord.temperature}°C</Text>
+            </View>
+          </View>
+
+          <View className={styles.detailCard}>
+            <Text className={styles.detailCardTitle}>农事描述</Text>
+            <Text className={styles.detailDesc}>{selectedRecord.description}</Text>
+          </View>
+        </ScrollView>
+
+        <View className={styles.detailFooter}>
+          <Button className={styles.detailBtnSecondary} onClick={handleBackToList}>
+            返回列表
+          </Button>
+          <Button className={styles.detailBtnPrimary} onClick={handleContinueAdd}>
+            继续新增
+          </Button>
+        </View>
+      </View>
+    );
+  };
+
+  const renderListView = () => (
     <View className={styles.page}>
-      {/* 顶部搜索和筛选 */}
       <View className={styles.header}>
         <View className={styles.searchBar}>
           <Text className={styles.searchIcon}>🔍</Text>
@@ -170,7 +294,6 @@ const FarmRecordPage: React.FC = () => {
         </ScrollView>
       </View>
 
-      {/* 列表内容 */}
       <ScrollView className={styles.content} scrollY>
         <View className={styles.listHeader}>
           <Text>共 {filteredRecords.length} 条记录</Text>
@@ -214,12 +337,10 @@ const FarmRecordPage: React.FC = () => {
         <View style={{ height: 120 }} />
       </ScrollView>
 
-      {/* 悬浮添加按钮 */}
       <View className={styles.fab} onClick={handleAdd}>
         <Text className={styles.fabIcon}>+</Text>
       </View>
 
-      {/* 新增表单弹窗 */}
       {showAddModal && (
         <View className={styles.modalOverlay} onClick={() => setShowAddModal(false)}>
           <View className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
@@ -324,6 +445,8 @@ const FarmRecordPage: React.FC = () => {
       )}
     </View>
   );
+
+  return viewMode === 'detail' ? renderDetailView() : renderListView();
 };
 
 export default FarmRecordPage;

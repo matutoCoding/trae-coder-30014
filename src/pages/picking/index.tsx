@@ -1,33 +1,59 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { View, Text, ScrollView, Input, Button } from '@tarojs/components';
-import Taro, { useDidShow } from '@tarojs/taro';
+import Taro, { useRouter, useDidShow } from '@tarojs/taro';
 import styles from './index.module.scss';
 import classnames from 'classnames';
 import { mockPickingRecords, mockTeaPlots } from '@/data/mockFarming';
 import { PickingRecord } from '@/types';
+import { storage } from '@/utils/storage';
+import { generateId, formatDate, formatTime, generateBatchNo } from '@/utils/index';
 
 const PickingPage: React.FC = () => {
+  const router = useRouter();
+  const recordId = router.params.id || '';
+
   const [activeTab, setActiveTab] = useState('records');
   const [activeType, setActiveType] = useState('all');
   const [searchText, setSearchText] = useState('');
   const [records, setRecords] = useState<PickingRecord[]>([]);
+  const [viewMode, setViewMode] = useState<'list' | 'detail'>('list');
+  const [selectedRecord, setSelectedRecord] = useState<PickingRecord | null>(null);
   
   const [formData, setFormData] = useState({
     plotId: '',
     plotName: '',
     type: 'early-spring',
     typeName: '明前茶',
-    date: new Date().toISOString().split('T')[0],
-    time: '06:30',
+    date: formatDate(),
+    time: formatTime(),
     weight: '',
     pickers: [] as string[],
     leafGrade: '一芽一叶',
     quality: 'good'
   });
 
+  useEffect(() => {
+    if (recordId) {
+      loadData();
+      setTimeout(() => {
+        const allRecords = storage.getAllPickingRecords(mockPickingRecords);
+        const record = allRecords.find(r => r.id === recordId);
+        if (record) {
+          setSelectedRecord(record);
+          setViewMode('detail');
+        }
+      }, 100);
+    }
+  }, [recordId]);
+
   useDidShow(() => {
-    setRecords(mockPickingRecords);
+    loadData();
   });
+
+  const loadData = () => {
+    const allRecords = storage.getAllPickingRecords(mockPickingRecords);
+    setRecords(allRecords);
+  };
 
   const tabs = [
     { key: 'records', label: '采摘记录' },
@@ -74,7 +100,7 @@ const PickingPage: React.FC = () => {
   }, [records, activeType, searchText]);
 
   const todayRecords = useMemo(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = formatDate();
     return records.filter(r => r.date === today);
   }, [records]);
 
@@ -97,6 +123,16 @@ const PickingPage: React.FC = () => {
     if (quality === 'excellent') return '特级';
     if (quality === 'good') return '优良';
     return '普通';
+  };
+
+  const getTypeColor = (type: string) => {
+    const colors: Record<string, string> = {
+      'early-spring': '#FFD700',
+      'before-rain': '#9C27B0',
+      'after-rain': '#2196F3',
+      'autumn': '#FF9800'
+    };
+    return colors[type] || '#2E7D32';
   };
 
   const handlePickerToggle = (picker: string) => {
@@ -130,11 +166,11 @@ const PickingPage: React.FC = () => {
       return;
     }
 
-    const batchNo = 'B' + formData.date.replace(/-/g, '') + 
-      String(records.filter(r => r.date === formData.date).length + 1).padStart(3, '0');
+    const todayCount = records.filter(r => r.date === formData.date).length;
+    const batchNo = generateBatchNo('B') + String(todayCount + 1).padStart(3, '0');
 
     const newRecord: PickingRecord = {
-      id: Date.now().toString(),
+      id: generateId('PK'),
       batchNo,
       plotId: formData.plotId,
       plotName: formData.plotName,
@@ -151,7 +187,8 @@ const PickingPage: React.FC = () => {
       quality: formData.quality as any
     };
 
-    setRecords(prev => [newRecord, ...prev]);
+    const allRecords = storage.addPickingRecord(newRecord, mockPickingRecords);
+    setRecords(allRecords);
     setActiveTab('records');
     Taro.showToast({ title: '登记成功', icon: 'success' });
     
@@ -160,8 +197,8 @@ const PickingPage: React.FC = () => {
       plotName: '',
       type: 'early-spring',
       typeName: '明前茶',
-      date: new Date().toISOString().split('T')[0],
-      time: '06:30',
+      date: formatDate(),
+      time: formatTime(),
       weight: '',
       pickers: [],
       leafGrade: '一芽一叶',
@@ -169,9 +206,118 @@ const PickingPage: React.FC = () => {
     });
   };
 
-  return (
+  const handleViewRecord = (record: PickingRecord) => {
+    setSelectedRecord(record);
+    setViewMode('detail');
+  };
+
+  const handleBackToList = () => {
+    setSelectedRecord(null);
+    setViewMode('list');
+    if (recordId) {
+      Taro.navigateBack().catch(() => {
+        setViewMode('list');
+        setActiveTab('records');
+      });
+    }
+  };
+
+  const handleContinueAdd = () => {
+    setViewMode('list');
+    setActiveTab('add');
+  };
+
+  const renderDetailView = () => {
+    if (!selectedRecord) return null;
+    
+    return (
+      <View className={styles.detailPage}>
+        <View className={styles.detailHeader}>
+          <View className={styles.backBtn} onClick={handleBackToList}>
+            <Text className={styles.backIcon}>‹</Text>
+            <Text className={styles.backText}>返回列表</Text>
+          </View>
+          <Text className={styles.detailTitle}>采摘记录详情</Text>
+          <View style={{ width: 120 }} />
+        </View>
+
+        <ScrollView className={styles.detailContent} scrollY>
+          <View className={styles.detailBatchHeader}>
+            <Text className={styles.detailBatchNo}>{selectedRecord.batchNo}</Text>
+            <View 
+              className={classnames('tag', getTeaTypeClass(selectedRecord.type))}
+              style={{ backgroundColor: `${getTypeColor(selectedRecord.type)}15`, color: getTypeColor(selectedRecord.type) }}
+            >
+              {selectedRecord.typeName}
+            </View>
+          </View>
+
+          <View className={styles.detailCard}>
+            <Text className={styles.detailCardTitle}>基本信息</Text>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>地块名称</Text>
+              <Text className={styles.detailValue}>{selectedRecord.plotName}</Text>
+            </View>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>采摘日期</Text>
+              <Text className={styles.detailValue}>{selectedRecord.date}</Text>
+            </View>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>采摘时间</Text>
+              <Text className={styles.detailValue}>{selectedRecord.time}</Text>
+            </View>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>采摘重量</Text>
+              <Text className={styles.detailValueHighlight}>{selectedRecord.weight}{selectedRecord.unit}</Text>
+            </View>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>叶级</Text>
+              <Text className={styles.detailValue}>{selectedRecord.leafGrade}</Text>
+            </View>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>品质评定</Text>
+              <View className={classnames('tag', getQualityClass(selectedRecord.quality))}>
+                {getQualityText(selectedRecord.quality)}
+              </View>
+            </View>
+          </View>
+
+          <View className={styles.detailCard}>
+            <Text className={styles.detailCardTitle}>采摘人员</Text>
+            <View className={styles.detailPickers}>
+              {selectedRecord.pickers.map((picker, idx) => (
+                <Text key={idx} className={styles.detailPickerTag}>{picker}</Text>
+              ))}
+            </View>
+          </View>
+
+          <View className={styles.detailCard}>
+            <Text className={styles.detailCardTitle}>环境信息</Text>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>天气</Text>
+              <Text className={styles.detailValue}>{selectedRecord.weather}</Text>
+            </View>
+            <View className={styles.detailRow}>
+              <Text className={styles.detailLabel}>气温</Text>
+              <Text className={styles.detailValue}>{selectedRecord.temperature}°C</Text>
+            </View>
+          </View>
+        </ScrollView>
+
+        <View className={styles.detailFooter}>
+          <Button className={styles.detailBtnSecondary} onClick={handleBackToList}>
+            返回列表
+          </Button>
+          <Button className={styles.detailBtnPrimary} onClick={handleContinueAdd}>
+            继续登记
+          </Button>
+        </View>
+      </View>
+    );
+  };
+
+  const renderListView = () => (
     <View className={styles.page}>
-      {/* Tab切换 */}
       <View className={styles.tabBar}>
         {tabs.map(tab => (
           <View
@@ -186,7 +332,6 @@ const PickingPage: React.FC = () => {
 
       {activeTab === 'records' ? (
         <View className={styles.content}>
-          {/* 搜索和筛选 */}
           <View className={styles.filterSection}>
             <View className={styles.searchBar}>
               <Text className={styles.searchIcon}>🔍</Text>
@@ -210,7 +355,6 @@ const PickingPage: React.FC = () => {
             </ScrollView>
           </View>
 
-          {/* 今日统计 */}
           <View className={styles.statsRow}>
             <View className={styles.statCard}>
               <Text className={styles.statValue}>{todayWeight.toFixed(1)}kg</Text>
@@ -222,17 +366,23 @@ const PickingPage: React.FC = () => {
             </View>
           </View>
 
-          {/* 列表 */}
           <ScrollView className={styles.listScroll} scrollY>
             <View className={styles.listHeader}>
               <Text>共 {filteredRecords.length} 条记录</Text>
             </View>
 
             {filteredRecords.map(record => (
-              <View key={record.id} className={styles.recordCard}>
+              <View 
+                key={record.id} 
+                className={styles.recordCard}
+                onClick={() => handleViewRecord(record)}
+              >
                 <View className={styles.recordHeader}>
                   <View className={styles.batchNo}>批次：{record.batchNo}</View>
-                  <View className={classnames('tag', getTeaTypeClass(record.type))}>
+                  <View 
+                    className={classnames('tag', getTeaTypeClass(record.type))}
+                    style={{ backgroundColor: `${getTypeColor(record.type)}15`, color: getTypeColor(record.type) }}
+                  >
                     {record.typeName}
                   </View>
                 </View>
@@ -259,7 +409,9 @@ const PickingPage: React.FC = () => {
                     <Text className={styles.pickerLabel}>采摘人员：</Text>
                     <Text className={styles.pickerNames}>{record.pickers.join('、')}</Text>
                   </View>
-                  <View className={classnames('tag', getQualityClass(record.quality))}>
+                  <View 
+                    className={classnames('tag', getQualityClass(record.quality))}
+                  >
                     {getQualityText(record.quality)}
                   </View>
                 </View>
@@ -403,6 +555,8 @@ const PickingPage: React.FC = () => {
       )}
     </View>
   );
+
+  return viewMode === 'detail' ? renderDetailView() : renderListView();
 };
 
 export default PickingPage;
